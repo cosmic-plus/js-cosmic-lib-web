@@ -60,8 +60,8 @@ display on webpages and is easily styleable.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <link rel="stylesheet" type="text/css" href="https://github.com/MisterTicot/js-cosmic-lib/cosmic-lib.css"></link>
-    <script src="https://github.com/MisterTicot/js-cosmic-lib/cosmic-lib.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.0/cosmic-lib.css"></link>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.0/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
@@ -122,6 +122,8 @@ be omitted when it is XLM.
 `signers` should be written as follow:
 
 > ...&signer=weight:type:value
+
+If you need to check the syntax for each operation, you can consult the [debug page](https://misterticot.github.io/js-cosmic-lib/debug.html#2).
 
 ### Building cosmic links
 
