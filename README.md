@@ -154,7 +154,7 @@ var clink2 = new cosmicLib.CosmicLink(XDR, 'test')
 var clink3 = new cosmicLib.CosmicLink(transaction) // public network by default
 
 /// Expose the transaction HTML nodes.
-var bodyNode = document.getElementByTagName('body')[0]
+var bodyNode = document.getElementsByTagName('body')[0]
 bodyNode.appendChild(clink1.transactionNode)
 bodyNode.appendChild(clink2.transactionNode)
 
@@ -164,8 +164,8 @@ clink1.getXdr().then(function(xdr) {
   console.log(xdr)
 })
 /// In JS6
-var transaction = await clink2.getTransaction()
-var uri = await clink3.getUri()
+const transaction = await clink2.getTransaction()
+const uri = await clink3.getUri()
 
 /// Sign and send
 clink2.sign(secretSeed)
