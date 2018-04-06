@@ -74,7 +74,7 @@ your repository or use Git submodules:
 
 ```sh
 git submodule add https://github.com/MisterTicot/js-cosmic-lib/
-git submodule init -u
+git submodule update --init
 ```
 
 A node package is on the way and I'm considering adding a bower package aswell
