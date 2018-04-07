@@ -20,8 +20,14 @@
     "link",
 	"library"
   ],
-  "author": "Mister.Ticot",
+  "homepage": "https://github.com/MisterTicot/js-cosmic-lib",
+  "bug": {
+    "url": "https://github.com/MisterTicot/js-cosmic-lib/issues",
+    "email": "author@cosmic.link"
+  },
+  "author": "Mister.Ticot <author@cosmic.link> (https://github.com/MisterTicot)",
   "license": "MIT",
+  "repository": "github:MisterTicot/js-cosmic-lib",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
