@@ -8,7 +8,7 @@ an URI:
 
 > [https://cosmic.link/?payment&amount=20&destination=someone*example.org](https://cosmic.link/?payment&amount=20&destination=someone*example.org)
 
-`js-cosmic-lib` is able to transform such link in a valid Stellar Transaction 
+js-cosmic-lib` is able to transform such link in a valid Stellar Transaction 
 object, and eventually sign it and send it. It can aswell transform a valid 
 Stellar Transaction into an URI so you can easily transmit it over mail, 
 textchat, website and so on. Additionaly, it offers to display those transaction
@@ -60,8 +60,8 @@ display on webpages and is easily styleable.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.0/cosmic-lib.css"></link>
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.0/cosmic-lib.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.1/cosmic-lib.css"></link>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.1/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
