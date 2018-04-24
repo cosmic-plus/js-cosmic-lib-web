@@ -60,8 +60,8 @@ display on webpages and is easily styleable.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.5/cosmic-lib.css"></link>
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.1.5/cosmic-lib.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.0/cosmic-lib.css"></link>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.0/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
@@ -88,14 +88,17 @@ composite objects (asset, memo, signer, some price) have their field separated b
 colons (:). The lists (asset path) are comma-separated. The only difference is
 that timebounds are using [ISO date formatting]() for readability.
 
-So, a cosmic link query start with the name of an operation, followed by
+A cosmic link query start with the name of an operation, followed by
 zero or more transaction fields and operation fields.
 
 > https://cosmic.link?[operation]&[transactionField]=[value]&[operationField]=[value]
 
 ### Transaction fields
 
-They are `memo`, `minTime`, `maxTime`, `fee`.
+They are `network`, `source`, `memo`, `minTime`, `maxTime`, `fee`.
+All of them are optional
+
+Network can be either `public` or `testing`.
 
 Memo can be of type `text`, `id`, `hash`, or `return` (which's also a hash) and
 are written in the form:
