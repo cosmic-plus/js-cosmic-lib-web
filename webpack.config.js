@@ -8,13 +8,17 @@ const config = {
         test: /\.(js)$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      }
+     },
+     {
+       test: /\.css$/,
+       use: ['style-loader', 'postcss-loader']
+     }
     ]
   }
 }
 
 const library = Object.assign({}, config, {
-  entry: './src/cosmic-lib.js',
+  entry: './src/index.js',
   output: {
     path: __dirname,
     filename: 'cosmic-lib.js',

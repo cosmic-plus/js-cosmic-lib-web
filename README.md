@@ -2,15 +2,16 @@
 
 ## What is js-cosmic-lib?
 
-`js-cosmic-lib` implements the *Cosmic Link* protocol in JavaScript. The Cosmic 
-Link protocol allow to express a [Stellar](https://stellar.org) transaction as 
+`js-cosmic-lib` implements the *Cosmic Link* protocol in JavaScript. The Cosmic
+Link protocol allow to express a [Stellar](https://stellar.org) transaction as
 an URI:
 
-> [https://cosmic.link/?payment&amount=20&destination=someone*example.org](https://cosmic.link/?payment&amount=20&destination=someone*example.org)
+>
+[https://cosmic.link/?payment&amount=10&destination=tips*cosmic.link](https://cosmic.link/?payment&amount=10&destination=tips*cosmic.link)
 
-js-cosmic-lib` is able to transform such link in a valid Stellar Transaction 
-object, and eventually sign it and send it. It can aswell transform a valid 
-Stellar Transaction into an URI so you can easily transmit it over mail, 
+`js-cosmic-lib` is able to transform such link in a valid Stellar Transaction
+object, and eventually sign it and send it. It can aswell transform a valid
+Stellar Transaction into an URI so you can easily transmit it over mail,
 textchat, website and so on. Additionaly, it offers to display those transaction
 in a nicely formatted HTML/CSS DOM node.
 
@@ -23,14 +24,14 @@ query string:
 
 > stellar://?setOptions&lowThreshold=10
 
-The basic idea here is that several service could act as authenticators and 
-offer to sign transaction submitted as cosmic links. As a cosmic link emitter, 
-you could either ask the user which authenticator he'd like to use, or rely 
+The basic idea here is that several service could act as authenticators and
+offer to sign transaction submitted as cosmic links. As a cosmic link emitter,
+you could either ask the user which authenticator he'd like to use, or rely
 on [https://cosmic.link](https://cosmic.link).
 
-The cosmic link website is proposed as the standard platform to handle those 
-links. It is both an educative and a redirecting service. cosmic.link doesn't 
-act as an authenticator itself, but propose a list of them from which the user 
+The cosmic link website is proposed as the standard platform to handle those
+links. It is both an educative and a redirecting service. cosmic.link doesn't
+act as an authenticator itself, but propose a list of them from which the user
 can choose, and eventually setup a permanent redirection.
 
 To conclude, `js-cosmic-lib` allow both transaction emitters and transaction
@@ -42,26 +43,24 @@ This means that the library is not full-featured yet, and subject to changes. At
 this time, the base is already well-structured; but changes in some feature may
 still happens.
 
-It also means this have not been extensively tested yet. If you encounter any 
-issue using this library, please report it here under the 'Issues' section so I 
+It also means this have not been extensively tested yet. If you encounter any
+issue using this library, please report it here under the 'Issues' section so I
 can make it right.
 
-However, despite being flagged Alpha, the core functionnality is now fully 
+However, despite being flagged Alpha, the core functionnality is now fully
 functionnal and early implementators may simply go ahead.
 
 ## Install
 
 There's several way you can install this library. If you want to give it a try
-you may simply link it from an HTML file. The CSS Stylesheet is for transaction
-display on webpages and is easily styleable.
+you may simply link it from an HTML file.
 
 
 ```HTML
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.1/cosmic-lib.css"></link>
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.1/cosmic-lib.js"></script>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.2/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
@@ -69,21 +68,33 @@ display on webpages and is easily styleable.
 ```
 
 For production use, thought, it would be more secure and reliable to use your
-own copy of the library. You could either download the files and add them to
-your repository or use Git submodules:
+own copy of the library. You can download the release bundle form Github or use
+Git submodules:
 
 ```sh
 git submodule add https://github.com/MisterTicot/js-cosmic-lib/
 git submodule update --init
 ```
 
-A node package is on the way and I'm considering adding a bower package aswell
-to make your life easier.
+There's also a node module available:
+```sh
+npm install --save cosmic-lib
+```
+
+### Styling cosmic-lib HTML nodes
+
+The styling sheet included in the Javascript module is also available at:
+
+> https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/${version}/cosmic-lib.css
+
+You can use it as a template to re-style how cosmic-lib display transactions
+in your website. Simply make sure that your own stylesheet is loaded after
+the cosmic-lib module.
 
 ## Cosmic links format
 
-Cosmic link format is based on 
-[js-stellar-sdk](https://stellar.github.io/js-stellar-sdk/Operation.html). The 
+Cosmic link format is based on
+[js-stellar-sdk](https://stellar.github.io/js-stellar-sdk/Operation.html). The
 composite objects (asset, memo, signer, some price) have their field separated by
 colons (:). The lists (asset path) are comma-separated. The only difference is
 that timebounds are using [ISO date formatting]() for readability.
@@ -134,7 +145,7 @@ In which cases should I use cosmic-lib to build cosmic links ?
 
 * When you have an already working platform issuing various kind of transaction,
 the easiest way to implement the cosmic link protocol would be to use cosmic-lib
-to convert your Transaction objects into cosmic links, and offer the users to 
+to convert your Transaction objects into cosmic links, and offer the users to
 sign their transactions using them.
 * More generally, if your platform is going to issue transaction whose are made
 of a wide variety of operations, you should use cosmic-lib.
@@ -191,16 +202,16 @@ Another way to contribute to this project could be make your own service issuing
 or handling cosmic links. Having a compatible wallet and exchange would be
 awesome!
 
-Right now, I'm also coding an authenticator which's available at 
-[https://stellar-authenticator.org](https://stellar-authenticator.org). Its 
-scope will be limited to account creation and transaction confirmation because 
-a small code base is easier to secure. If you want to, you can also check it 
+Right now, I'm also coding an authenticator which's available at
+[https://stellar-authenticator.org](https://stellar-authenticator.org). Its
+scope will be limited to account creation and transaction confirmation because
+a small code base is easier to secure. If you want to, you can also check it
 out and contribute there.
 
 ## Thank you!
 
-And many thanks to the Stellar community at [Galactic 
-Talk](https://galactictalk.org) for the ideas and the advices that made this 
+And many thanks to the Stellar community at [Galactic
+Talk](https://galactictalk.org) for the ideas and the advices that made this
 project possible!
 
 Especially to Torkus that bring the idea in the first place, and Dzham who
