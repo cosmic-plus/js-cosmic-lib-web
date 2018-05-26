@@ -23,11 +23,10 @@ const library = Object.assign({}, config, {
     path: __dirname,
     filename: 'cosmic-lib.js',
     library: 'cosmicLib',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
-  externals: {
-    'stellar-sdk': 'Stellar SDK'
-  }
+  externals: { 'stellar-sdk': 'stellar-sdk' }
 })
 
 const debug = Object.assign({}, config, {

@@ -24,6 +24,10 @@ query string:
 
 > stellar://?setOptions&lowThreshold=10
 
+Stellar transaction XDR can alternatively be used:
+
+> https://cosmic.link/?xdr=AAAAAMTBJz6NQu3FnhyNMC9EjGr4ypN3EMGkY20e2c/tzqLpAAAAZACJR8YAAAAKAAAAAAAAAAAAAAABAAAAAAAAAAoAAAAFSWRhZGUAAAAAAAABAAAAAjMyAAAAAAAAAAAAAA==&network=test
+
 The basic idea here is that several service could act as authenticators and
 offer to sign transaction submitted as cosmic links. As a cosmic link emitter,
 you could either ask the user which authenticator he'd like to use, or rely
@@ -60,14 +64,14 @@ you may simply link it from an HTML file.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.2.5/cosmic-lib.js"></script>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.3.1/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
   </body>
 ```
 
-For production use, thought, it would be more secure and reliable to use your
+For production use, though, it would be more secure and reliable to use your
 own copy of the library. You can download the release bundle form Github or use
 Git submodules:
 
@@ -106,10 +110,10 @@ zero or more transaction fields and operation fields.
 
 ### Transaction fields
 
-They are `network`, `source`, `memo`, `minTime`, `maxTime`, `fee`.
+Those are `network`, `source`, `memo`, `minTime`, `maxTime`, `fee`, `sequence`.
 All of them are optional
 
-Network can be either `public` or `testing`.
+Network can be either `public` or `test`.
 
 Memo can be of type `text`, `id`, `hash`, or `return` (which's also a hash) and
 are written in the form:
@@ -123,6 +127,7 @@ are written in the form:
 > maxTime=2020-02-02T12:20
 
 `fee` is the fees of the whole transaction and is here only for completeness.
+`sequence` is the sequence number and is here for completeness aswell.
 
 ### Operation fields
 
@@ -133,59 +138,178 @@ be omitted when it is XLM.
 
 > https://cosmic.link?payment&amount=5&destination=someone*example.org
 
+Addresses can be either federated addresses or public keys.
+
+Non-native `asset` should be written as follow:
+
+> ...&asset=code:issuer
+
+Asset path should be written as follow:
+
+> ...&path=code1:issuer1,code2:issuer2,...,codeN:issuerN
+
 `signers` should be written as follow:
 
 > ...&signer=weight:type:value
 
 If you need to check the syntax for each operation, you can consult the [debug page](https://misterticot.github.io/js-cosmic-lib/debug.html#2).
 
-### Building cosmic links
+### XDR format
 
-In which cases should I use cosmic-lib to build cosmic links ?
+Cosmic links also support XDR:
 
-* When you have an already working platform issuing various kind of transaction,
-the easiest way to implement the cosmic link protocol would be to use cosmic-lib
-to convert your Transaction objects into cosmic links, and offer the users to
-sign their transactions using them.
-* More generally, if your platform is going to issue transaction whose are made
-of a wide variety of operations, you should use cosmic-lib.
-* If you want to offer to sign the transactions, you could use cosmic-lib
-aswell to handle this part.
+> https://cosmic.link/?xdr=...&${options}
+
+Valid options are:
+* network=...: either `public` or `test`
+* stripSource: remove original source account and allow any account to sign the
+  transaction
+* stripSequence: update the sequence number to current valid value
+* stripSignatures: strip out signatures
+
+At this time only transactions with one operation are supported.
+Partially-signed transaction are supported.
+
+### Which form to use ?
+
+As a general rule, if you're issuing a transaction that is meant to be signed
+by a given account, and meant to be signed once, the XDR form may fit better.
+
+Conversely, if you're issuing a transaction that have meaning for everybody, the
+"human"-form should be prefered (e.g.: signing to an inflation pool).
+
+You may also prefer the "human"-form if you don't want to burden your service
+with any big depend. This form can be written quite efficiently by simple
+routines.
+
+### cosmic-lib use cases
+
+In which cases should I use cosmic-lib ?
+
+* If you need a way to display transactions accurately & nicely.
+* If you want to convert between XDR/transactions and query format.
+* If you want to parse cosmic links and sign them at some point.
 
 In which cases should I not use cosmic-lib to build cosmic links ?
 
-* If your service is issuing one or few type of transactions, it may be lighter
-and easier to have some routine writting the cosmic link for you. Especially in
-the case were you want to relly only on cosmic links. For example, if the only
-kind of transaction you're issuing are payment transactions.
+* If you're already issuing XDR transactions, you may prefer to issue cosmic
+links using the XDR form.
+* If the transaction writing is simple enough that you can write them by yourself
+with few simple routines.
+* If having dependencies is an issue for you.
 
 ## Some example code
 
 ```javascript
+var CosmicLink = cosmicLib.CosmicLink
+
+/// Set default page for all futuer cosmic links.
+CosmicLink.page = 'https:/mysite.org/parse'
+
 /// Create a cosmic link from an URL:
-var clink1 = new cosmicLib.CosmicLink(location.url, 'public', sourceAccount)
+var clink1 = new CosmicLink(location.url, 'public', sourceAccount)
 /// Create a cosmic link from a transaction XDR:
-var clink2 = new cosmicLib.CosmicLink(XDR, 'test')
+var clink2 = new CosmicLink(XDR, 'test', { stripSource: true })
 /// Create a cosmic link from a transaction object:
-var clink3 = new cosmicLib.CosmicLink(transaction) // public network by default
+var clink3 = new CosmicLink(transaction) // public network by default
 
 /// Expose the transaction HTML nodes.
 var bodyNode = document.getElementsByTagName('body')[0]
-bodyNode.appendChild(clink1.transactionNode)
-bodyNode.appendChild(clink2.transactionNode)
+bodyNode.appendChild(clink1.htmlNode)
+bodyNode.appendChild(clink2.htmlNode)
 
 /// Translate the transaction into another format. All formats are proposed as
 /// promise as address resolution may take some time.
-clink1.getXdr().then(function(xdr) {
+clink1.getXdr().then(function (xdr) {
   console.log(xdr)
 })
 /// In JS6
 const transaction = await clink2.getTransaction()
 const uri = await clink3.getUri()
 
+/// Setting a handler that will be called each time a format get a new value
+/// (for example XDR change after signing)
+clink1.addFormatHandler('xdr', console.log)
+clink2.addFormatHandler('query', updateQueryBox)
+
 /// Sign and send
-clink2.sign(secretSeed)
-clink2.send()
+clink2.sign(secretSeed).then(function() {
+  return clink2.send()
+}).then(function (answer) {
+  console.log(answer)
+  console.log('Transaction validated')
+}).catch(function (answer) {
+  console.log(answer)
+  console.log('Transaction rejected')
+})
+```
+
+## Cheat sheet
+
+```javascript
+// --- Constructor ---
+// new CosmicLink(uri, "[userNetwork]", "[userAddress]")
+// new CosmicLink(query, "[userNetwork]", "[userAddress]")
+// new CosmicLink(transaction, "[userNetwork]", "[userAddress]", {...options})
+// new CosmicLink(xdr, "[userNetwork]", "[userAddress]", {...options})
+//
+// --- Options for transaction & xdr ---
+// stripSource = true      < Strip out source account
+// stripSequence = true    < Strip out sequence number
+// stripSignatures = true  < Strip out signatures
+// network = ...           < Specify a network for this transaction (kept in URI after conversion)
+//
+// --- Edit ---
+// CosmicLink.parse(any-format, {...options})
+// *CosmicLink.setField(field, value)
+// *CosmicLink.addOperation({...params})
+// *CosmicLink.changeOperation(index, {...params})
+// *CosmicLink.removeOperation(index)
+//
+// --- Formats (get) ---
+// CosmicLink.getUri()          < Return a promise of the URI string
+// CosmicLink.getQuery()        < Return a promise of the query string
+// CosmicLink.getJson()         < Return stringified JSON of the object
+// CosmicLink.getTdesc()        < Return a promise of the transaction descriptor
+// CosmicLink.getTransaction()  < Return a promise of the transaction
+// CosmicLink.getXdr()          < Return a promise of the transaction's XDR
+//
+// --- Handlers ---
+// CosmicLink.addFormatHandler(format, callback)
+// CosmicLink.removeFormatHandler(format, callback)
+// callback will receive event = { cosmicLink: ..., value: ..., error: ... }
+//
+// --- Datas ---           <<< Update everything on the go >>>
+// CosmicLink.user         < User address
+// *CosmicLink.aliases     < Local aliases for public keys
+// CosmicLink.network      < Test/Public network
+// CosmicLink.server       < The horizon server to use
+// CosmicLink.status       < Status of the CosmicLink (valid or specific error)
+// CosmicLink.errors       < An array of errors (or undefined if no error)
+// CosmicLink.page         < The base URI, without the query
+//
+// --- Datas (asynchronous)
+// CosmicLink.getSource()         < Transaction source
+// CosmicLink.getSourceAccount()  < Transaction source account object
+// CosmicLink.getSigners()        < Array of legit signers
+//
+// --- Tests ---
+// CosmicLink.hasSigner(publicKey)   < Test if `publicKey` is a signer for CosmicLink
+// CosmicLink.hasSigned(publicKey)   < Test if `publicKey` signature is available
+//
+// --- Actions ---
+// CosmicLink.selectNetwork()  < Select CosmicLink network for Stellar SDK
+// CosmicLink.sign(seed)       < Sign the transaction
+// CosmicLink.send([server])   < Send the transaction to the network
+//
+// --- Events ---
+// CosmicLink.onClick.type      < For onClick events on the HTML description
+//
+// --- HTML Nodes ---
+// CosmicLink.htmlNode         < HTML element for CosmicLink
+// CosmicLink.transactionNode  < HTML description of the transaction
+// CosmicLink.signersNode      < HTML element for the signers list
+// CosmicLink.statusNode       < HTML element for the transaction status & errors
 ```
 
 ## Contribute
