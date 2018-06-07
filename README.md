@@ -64,7 +64,7 @@ you may simply link it from an HTML file.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.3.4/cosmic-lib.js"></script>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.4.0/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
@@ -153,6 +153,16 @@ Asset path should be written as follow:
 > ...&signer=weight:type:value
 
 If you need to check the syntax for each operation, you can consult the [debug page](https://misterticot.github.io/js-cosmic-lib/debug.html#2).
+
+### Multi-operation
+
+You can specify several operation for a transaction this way:
+
+> https://cosmic.link/?transaction&memo=text:Date&operation=manageData&name=Month&value=June&operation=manageData&name=Year&value=2018
+
+The generalized syntax being:
+
+> ...?transaction&{...transactionFields}&operation={operationType}&{...operationFields}&...{moreOperations}
 
 ### XDR format
 

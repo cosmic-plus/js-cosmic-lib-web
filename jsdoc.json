@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": "src/cosmic-lib.js"
+    "include": "src/index.js"
   },
   "opts": {
     "destination": "./docs/",
