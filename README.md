@@ -64,7 +64,7 @@ you may simply link it from an HTML file.
   <body>
   ....
     <!-- Best placed at the end of body to not delay page loading -->
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.4.0/cosmic-lib.js"></script>
+    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/0.4.1/cosmic-lib.js"></script>
 
     <!-- This would setup a space where your transaction will display automatically -->
     <div id="CL_transactionNode"></div>
