@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-cheatsheet.html">CosmicLink cheatsheet</a></li><li class="nav-item"><a href="tutorial-cheatsheet2.html">Queries cheatsheet</a></li><li class="nav-item"><a href="tutorial-specifications.html">Queries specifications</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="CosmicLink.html">CosmicLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#addAliases">addAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#addFormatHandler">addFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#clearClickHandler">clearClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSigners">getSigners</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSource">getSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSourceAccount">getSourceAccount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#hasSigned">hasSigned</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#hasSigner">hasSigner</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#parse">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#removeAliases">removeAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#removeFormatHandler">removeFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#selectNetwork">selectNetwork</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#send">send</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#setClickHandler">setClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#sign">sign</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-defaults.html">defaults</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.addAliases">addAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.addFormatHandler">addFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.clearClickHandler">clearClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.removeAliases">removeAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.removeFormatHandler">removeFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.setClickHandler">setClickHandler</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-specs.html">specs</a></span></li>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>Welcome to js-cosmic-lib!</h1><h2>What is js-cosmic-lib?</h2><p><code>js-cosmic-lib</code> implements the <strong>Cosmic Link</strong> protocol in JavaScript. The Cosmic
+Link protocol allow to encode a <a href="https://stellar.org">Stellar</a> transaction as
+a query:</p>
+<blockquote>
+<p><a href="https://cosmic.link/?payment&amp;amount=100&amp;destination=tips*cosmic.link">https://cosmic.link/?payment&amp;amount=100&amp;destination=tips*cosmic.link</a></p>
+</blockquote>
+<p>It supports compound transactions:</p>
+<blockquote>
+<p><a href="https://cosmic.link/?transaction&amp;operation=manageData&amp;name=migrated&amp;value=true&amp;operation=setOptions&amp;homeDomain=anywallet.org">https://cosmic.link/?transaction&amp;operation=manageData&amp;name=migrated&amp;value=true&amp;operation=setOptions&amp;homeDomain=anywallet.org</a></p>
+</blockquote>
+<p>And XDR-as-queries:</p>
+<blockquote>
+<p><a href="https://cosmic.link/?xdr=AAAAAL2ef/Z7FpGtgUvkKaEg3uvy9IH+T9chWSUhQILKTk/NAAAAZAEMX34AAAADAAAAAAAAAAAAAAABAAAAAAAAAAUAAAABAAAAAIQ/AS7GRUBBd96ykumKKUFE92+oiwRuJ7KXuvPwwTQWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==&amp;network=public">https://cosmic.link/?xdr=AAAA...AA==&amp;network=public</a></p>
+</blockquote>
+<p>While the <strong>cosmic.link</strong> website provides a convenient way to share
+transactions over social medias, emails and static documents, any
+wallet/service can issue or handle cosmic links queries by itself. One
+advantage of cosmic links is to allow sharing transactions across the ecosystem
+without having to rely on any particular service.</p>
+<p>Cosmic links adoption will enable developpers to offer innovative services
+without having to implement a built-in wallet; And everyboy to use thoses
+services withouth having to compromise their private keys or create multiple
+accounts. By opening connections between projects, we will start to build a
+massive userbase at the ecosystem level rather than fragment it around a few
+top-level applications.</p>
+<h2>Get started</h2><h3>Install</h3><h4>Node</h4><pre class="prettyprint source lang-sh"><code>npm install --save stellar-sdk cosmic-lib</code></pre><p>In your script:</p>
+<pre class="prettyprint source lang-js"><code>const cosmicLib = require('cosmic-lib')
+const CosmicLink = require('cosmic-lib').CosmicLink</code></pre><p>Or:</p>
+<pre class="prettyprint source lang-js"><code>import cosmicLib from 'cosmic-lib'
+import {CosmicLink} from 'cosmic-lib'</code></pre><h4>HTML</h4><pre class="prettyprint source lang-HTML"><code>  &lt;body>
+  ...
+    &lt;!-- Part of js-cosmic-lib depends on js-stellar-sdk -->
+    &lt;script src=&quot;https://raw.githubusercontent.com/stellar/bower-js-stellar-sdk/master/stellar-sdk.min.js&quot;>&lt;/script>
+    &lt;!-- Best placed at the end of body to not delay page loading -->
+    &lt;script src=&quot;https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/master/cosmic-lib.js&quot;>&lt;/script>
+    &lt;script>var CosmicLink = cosmicLib.CosmicLink&lt;/script>
+  &lt;/body></code></pre><p>Note: For production release it is advised to serve your own copy of the libraries.</p>
+<h3>Sign &amp; Send</h3><pre class="prettyprint source lang-js"><code>var cosmicLink = new CosmicLink(url, { network: ..., user: ... })
+
+cosmicLink.sign(...keypairs)
+  .then(function () { return cosmicLink.send() })
+  .then(console.log)
+  .catch(console.error)</code></pre><p>Note: <code>network</code> should be either 'public' or 'test'. <code>user</code> is the fallback
+transaction source account. It is used in case <code>url</code> doesn't provides one. As
+for any address in cosmic-lib, you can give either a federated address or the
+account ID.</p>
+<h3>Convert</h3><h4>From cosmic link to Stellar Transaction object</h4><pre class="prettyprint source lang-js"><code>var cosmicLink = new CosmicLink(url, { network: ..., user: ... })
+
+cosmicLink.getTransaction()
+  .then(function (transaction) { console.log(transaction) })
+  .catch(console.error)</code></pre><h4>From cosmic link to XDR</h4><pre class="prettyprint source lang-js"><code>var cosmicLink = new CosmicLink(url, { network: ..., user: ... })
+
+cosmicLink.getXdr()
+  .then(function (xdr) { console.log(xdr) })
+  .catch(console.error)</code></pre><h4>From XDR to URI</h4><pre class="prettyprint source lang-js"><code>var cosmicLink = new CosmicLink(xdr, { network: ..., user: ..., page: ... })
+
+cosmicLink.getUri()
+  .then(function (uri) { console.log(uri) })
+  .catch(console.error)</code></pre><h3>Global configuration</h3><p><code>cosmicLib.defaults</code> allow to define the default values used when creating
+CosmicLink objects and using other cosmic-lib functions. This way, you won't
+need to provide the data each time you create a CosmicLink.</p>
+<pre class="prettyprint source"><code>cosmicLib.defaults.page = 'https://cosmic.link/'  // Base URI when generating links
+cosmicLib.defaults.network = 'test'               // 'public' by default
+cosmicLib.defaults.user = 'tips*cosmic.link'      // Undefined by default</code></pre><h3>Display (HTML)</h3><p>To automatically display a description of your <em>CosmicLink</em> in your HTML pages:</p>
+<pre class="prettyprint source lang-HTML"><code>    &lt;!-- This would setup a space where your transactions will display automatically -->
+    &lt;div id=&quot;CL_htmlNode&quot;>&lt;/div></code></pre><p>To handle the HTML node from javascript:</p>
+<pre class="prettyprint source lang-js"><code>var cosmicLink = new CosmicLink(url, network, userAddress)
+var body = document.querySelector('body')
+document.appendChild(body, cosmicLink.htmlNode)</code></pre><h3>Styling</h3><p>The default style sheet is loaded with the library. If you want to tweak the CSS
+you can find the template at:</p>
+<blockquote>
+<p><a href="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/master/cosmic-lib.css">https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/master/cosmic-lib.css</a></p>
+</blockquote>
+<p>Make sure you load it <em>after</em> the library.</p>
+<h2>Emitting cosmic links without this library</h2><p>As cosmic links syntax is straightforward, it may feel more convenient to write
+a few routines to produce them without relying on any additional dependency.</p>
+<h3>XDR links</h3><pre class="prettyprint source lang-js"><code>function makeXdrUri (page, network, xdr) {
+  return page + '?xdr=' + xdr + '&network=' network
+}
+
+const uri = makeXdrUri ('https://cosmic.link/', 'test', 'AAA...A==')</code></pre><h3>Single-operation links</h3><pre class="prettyprint source lang-js"><code>function makeOperationUri (page, operation, arguments) {
+  var query = '?' + operation
+  for (let field in arguments) query += '&' + field + '=' + arguments[field]
+  return page + query
+}
+
+const uri = makeOperationUri('https://cosmic.link/', 'payment',
+  { memo: 'donation', destination: 'tips*cosmic.link', amount: '100' }
+)</code></pre><p>Note: you may want to sanitize operation/arguments using <code>encodeURIComponent</code>.</p>
+<h3>Multi-operation links</h3><pre class="prettyprint source lang-js"><code>function makeTransactionUrl (page, transactionFields, operations) {
+  var query = '?transaction'
+  for (let field in transactionFields) query += '&' + field + '=' + transactionFields[field]
+  operations.forEach(function (entry) {
+    query += '&operation=' + entry.type
+    delete entry.type
+    for (let field in entry) query += '&' + field + '=' + entry[field]
+  })
+  return page + query
+}
+
+const uri = makeTransactionUrl('https://cosmic.link/',
+  { memo: 'text:Example', minDate: '2018-07' },
+  [
+    { type: 'setOptions', homeDomain: 'https://stellar.org' },
+    { type: 'manageData', name: 'updated', value: 'yes' },
+    { type: 'manageData', name: 'userID', value: '737' }
+  ])</code></pre><p>Note: you may want to sanitize fields/operation/arguments using
+<code>encodeURIComponent</code>.</p>
+<h2>Additional ressources</h2><h3>Support</h3><ul>
+<li>Slack: @Mister.Ticot</li>
+<li>Telegram: <a href="https://t.me/cosmiclink">https://t.me/cosmiclink</a></li>
+<li>Galactic Talk:</li>
+<li>Reddit:</li>
+</ul>
+<h3>Releases</h3><p>This is a beta release, some compatibility-breaking changes are to be expected.
+The minor version number will jump by ten when this will happen.</p>
+<ul>
+<li>GitHub repository: <a href="https://github.com/MisterTicot/js-cosmic-lib">https://github.com/MisterTicot/js-cosmic-lib</a></li>
+<li>NPM package: <a href="https://npmjs.com/cosmic-lib">https://npmjs.com/cosmic-lib</a></li>
+<li>Task list: <a href="https://github.com/MisterTicot/js-cosmic-lib-src/blob/master/TODO.md">https://github.com/MisterTicot/js-cosmic-lib-src/blob/master/TODO.md</a></li>
+</ul>
+<h3>Documentation</h3><ul>
+<li>Complete documentation: <a href="https://github.com/MisterTicot/js-cosmic-lib/docs">https://github.com/MisterTicot/js-cosmic-lib/docs</a></li>
+<li>Cosmic queries specification: <a href="https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-specifications.html">https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-specifications.html</a></li>
+<li>Cosmic queries cheatsheet: <a href="https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet2.md">https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet2.md</a></li>
+<li>CosmicLink class cheatsheet: <a href="https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet.md">https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet.md</a></li>
+</ul>
+<h3>Related tools</h3><ul>
+<li>Demo page: <a href="https://misterticot.github.io/js-cosmic-lib/demo.html">https://misterticot.github.io/js-cosmic-lib/demo.html</a></li>
+<li>Debug page: <a href="https://misterticot.github.io/js-cosmic-lib/debug.html">https://misterticot.github.io/js-cosmic-lib/debug.html</a></li>
+</ul>
+<h3>Related articles</h3><ul>
+<li>22 jan 2018: <a href="https://steemit.com/crypto/@mister.ticot/a-standardized-way-of-handling-stellar-transactions">A standardized way of handling Stellar transactions</a></li>
+</ul>
+<h3>Services that implement cosmic links</h3><ul>
+<li>The Cosmic.Link website: <a href="https://cosmic.link">https://cosmic.link</a></li>
+<li>Stellar Authenticator: <a href="https://stellar-authenticator.org">https://stellar-authenticator.org</a></li>
+</ul>
+<h2>Contribute</h2><p><code>js-cosmic-lib</code> is a free software. You are very welcome to contribute by
+whatever means you'd like. Donation are also possible at [tips<em>cosmic.link]
+(https://cosmic.link/?payment&amp;memo=Donation&amp;destination=tips</em>cosmic.link&amp;amount=100)</p>
+<h2>Thank you :)</h2><p>Especially to: Torkus, Dhzam, StellarGuard, Zac and Umbre1.
+And to the Stellar Foundation for supporting my work.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 18:53:42 GMT-0500 (GMT-05:00) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

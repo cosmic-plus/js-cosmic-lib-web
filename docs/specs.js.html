@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>specs.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-cheatsheet.html">CosmicLink cheatsheet</a></li><li class="nav-item"><a href="tutorial-cheatsheet2.html">Queries cheatsheet</a></li><li class="nav-item"><a href="tutorial-specifications.html">Queries specifications</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="CosmicLink.html">CosmicLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#addAliases">addAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#addFormatHandler">addFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#clearClickHandler">clearClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSigners">getSigners</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSource">getSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#getSourceAccount">getSourceAccount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#hasSigned">hasSigned</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#hasSigner">hasSigner</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#parse">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#removeAliases">removeAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#removeFormatHandler">removeFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#selectNetwork">selectNetwork</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#send">send</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#setClickHandler">setClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CosmicLink.html#sign">sign</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-defaults.html">defaults</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.addAliases">addAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.addFormatHandler">addFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.clearClickHandler">clearClickHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.removeAliases">removeAliases</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.removeFormatHandler">removeFormatHandler</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-defaults.html#.setClickHandler">setClickHandler</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-specs.html">specs</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">specs.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use_strict'
+/**
+ * Contains Stellar transactions specification.
+ *
+ * @exports specs
+ */
+const specs = exports
+
+/**
+ * Transaction optional fields.
+ */
+specs.transactionOptionalFields = [
+  'network', 'memo', 'source', 'sequence',
+  'minTime', 'maxTime', 'fee'
+]
+
+/**
+ * Operation mandatory fields.
+ */
+specs.operationMandatoryFields = {
+  accountMerge: ['destination'],
+  allowTrust: ['assetCode', 'trustor'],
+  changeTrust: ['asset'],
+  createAccount: ['destination', 'startingBalance'],
+  createPassiveOffer: ['selling', 'buying', 'amount', 'price'],
+  inflation: [],
+  manageData: ['name'],
+  manageOffer: ['selling', 'buying', 'amount', 'price'],
+  pathPayment: ['sendAsset', 'sendMax', 'destination', 'destAsset', 'destAmount'],
+  payment: ['asset', 'destination', 'amount'],
+  setOptions: []
+}
+
+/**
+ * Operation optionnal fields.
+ */
+specs.operationOptionalFields = {
+  accountMerge: ['source'],
+  allowTrust: ['authorize', 'source'],
+  changeTrust: ['limit', 'source'],
+  createAccount: ['source'],
+  createPassiveOffer: ['source'],
+  inflation: ['source'],
+  manageData: ['value', 'source'],
+  manageOffer: ['offerId', 'source'],
+  pathPayment: ['path', 'source'],
+  payment: ['source'],
+  setOptions: ['inflationDest', 'clearFlags', 'setFlags', 'masterWeight',
+    'lowThreshold', 'medThreshold', 'highThreshold', 'signer', 'homeDomain',
+    'source']
+}
+
+/**
+ * Field types.
+ */
+specs.fieldType = {
+  amount: 'amount',
+  asset: 'asset',
+  assetCode: 'string',
+  assetIssuer: 'address',
+  authorize: 'boolean',
+  buying: 'asset',
+  clearFlags: 'flags',
+  destAsset: 'asset',
+  destAmount: 'amount',
+  destination: 'address',
+  fee: 'amount',
+  highThreshold: 'threshold',
+  homeDomain: 'string',
+  inflationDest: 'address',
+  limit: 'amount',
+  lowThreshold: 'threshold',
+  masterWeight: 'weight',
+  maxTime: 'date',
+  medThreshold: 'threshold',
+  memo: 'memo',
+  memoHash: 'hash',
+  memoText: 'string',
+  minTime: 'date',
+  network: 'network',
+  offerId: 'string',
+  price: 'price',
+  name: 'string',
+  path: 'assetsArray',
+  selling: 'asset',
+  sendAsset: 'asset',
+  sendMax: 'amount',
+  sequence: 'sequence',
+  setFlags: 'flags',
+  signer: 'signer',
+  signerAddress: 'address',
+  signerHash: 'hash',
+  signerTx: 'hash',
+  signerWeight: 'weight',
+  source: 'address',
+  startingBalance: 'amount',
+  trustor: 'address',
+  value: 'string'
+}
+
+/**
+ * Transaction field meaning.
+ */
+specs.fieldDesc = {
+  source: 'Source',
+  fee: 'Fees',
+  minTime: 'Valid only after',
+  maxTime: 'Valid only before',
+  memo: 'Memo',
+
+  network: 'Network',
+  sequence: 'Sequence'
+}
+
+/**
+ * An array of each valid type for fields.
+ */
+specs.types = []
+for (let field in specs.fieldType) {
+  const type = specs.fieldType[field]
+  specs.types.find(entry => entry === type) || specs.types.push(type)
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 18:53:42 GMT-0500 (GMT-05:00) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
