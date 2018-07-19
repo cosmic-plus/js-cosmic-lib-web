@@ -30,14 +30,13 @@ const library = Object.assign({}, config, {
 })
 
 const debug = Object.assign({}, config, {
-  entry: './src/debug.js',
+  entry: './src/extra/debug.js',
   output: {
     path: __dirname,
     filename: 'debug.js',
     library: 'debug',
     libraryTarget: 'var'
   },
-//  externals: './cosmic-lib.js'
 })
 
 module.exports = [ debug, library ]

@@ -5,13 +5,13 @@
   "main": "cosmic-lib.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docs": "jsdoc -c jsdoc.json",
     "format": "standard --fix 'src/**.js'",
-    "build-css": "autoprefixer-cli -o cosmic-lib.css src/cosmic-lib.css",
-    "build-debug": "cp -f src/debug.html debug.html",
-    "build": "webpack -p && npm run build-css && npm run build-debug",
+    "build-css": "autoprefixer-cli -o cosmic-lib.css src/extra/cosmic-lib.css",
+    "build-docs": "jsdoc -c jsdoc.json -u src/docs",
+    "build-html": "cp -f src/extra/*.html .",
+    "build": "webpack -p && npm run build-css && npm run build-html && npm run build-docs",
     "watch": "webpack -d --watch",
-    "serve": "npm run watch & live-server --ignore='**/node_modules/**,**/src/**,**/docs/**'"
+    "serve": "npm run watch & live-server --no-browser --ignore='**/node_modules/**,**/src/**,**/docs/**'"
   },
   "browserslist": "last 4 version, >0.1%",
   "keywords": [
@@ -30,23 +30,23 @@
   "license": "MIT",
   "repository": "github:MisterTicot/js-cosmic-lib",
   "devDependencies": {
-    "autoprefixer": "^8.5.1",
+    "autoprefixer": "^8.6.5",
     "autoprefixer-cli": "^1.0.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^7.1.5",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "jsdoc": "^3.5.5",
     "live-server": "^1.2.0",
     "minami": "^1.2.3",
-    "postcss-loader": "^2.1.5",
+    "postcss-loader": "^2.1.6",
     "standard": "^11.0.1",
     "style-loader": "^0.21.0",
-    "webpack": "^4.9.1",
-    "webpack-cli": "^2.1.4"
+    "webpack": "^4.16.1",
+    "webpack-cli": "^2.1.5"
   },
   "dependencies": {
-    "stellar-sdk": "^0.8.1"
+    "stellar-sdk": "^0.9.2"
   }
 }
