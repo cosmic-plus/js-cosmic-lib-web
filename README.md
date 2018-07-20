@@ -34,10 +34,10 @@ top-level applications.
 
 ### Install
 
-#### Node
+#### Node / Yarn
 
 ```sh
-npm install --save stellar-sdk cosmic-lib
+npm install --save cosmic-lib
 ```
 
 In your script:
@@ -55,15 +55,35 @@ import {CosmicLink} from 'cosmic-lib'
 ```
 
 
+#### Bower
+
+```js
+bower install cosmic-lib
+```
+
+In your HTML pages:
+
+```HTML
+  <body>
+  ...
+    <!-- Best placed at the end of body to not delay page loading -->
+    <!-- js-cosmic-lib depends on StellarSdk                      -->
+    <script src="./bower_components/stellar-sdk/stellar-sdk.min.js"></script>
+    <script src="./bower_components/cosmic-lib/cosmic-lib.js"></script>
+    <script>var CosmicLink = cosmicLib.CosmicLink</script>
+  </body>
+```
+
+
 #### HTML
 
 ```HTML
   <body>
   ...
-    <!-- Part of js-cosmic-lib depends on js-stellar-sdk -->
-    <script src="https://raw.githubusercontent.com/stellar/bower-js-stellar-sdk/master/stellar-sdk.min.js"></script>
     <!-- Best placed at the end of body to not delay page loading -->
-    <script src="https://raw.githubusercontent.com/MisterTicot/js-cosmic-lib/master/cosmic-lib.js"></script>
+    <!-- js-cosmic-lib depends on StellarSdk                      -->
+    <script src="https://unpkg.com/stellar-sdk/dist/stellar-sdk.min.js"></script>
+    <script src="https://unpkg.com/cosmic-lib/cosmic-lib.js"></script>
     <script>var CosmicLink = cosmicLib.CosmicLink</script>
   </body>
 ```
@@ -212,7 +232,7 @@ function makeTransactionUrl (page, transactionFields, operations) {
 }
 
 const uri = makeTransactionUrl('https://cosmic.link/',
-  { memo: 'text:Example', minDate: '2018-07' },
+  { memo: 'text:Example', minTime: '2018-07' },
   [
     { type: 'setOptions', homeDomain: 'https://stellar.org' },
     { type: 'manageData', name: 'updated', value: 'yes' },
@@ -228,10 +248,10 @@ Note: you may want to sanitize fields/operation/arguments using
 
 ### Support
 
-* Slack: @Mister.Ticot
-* Telegram: <https://t.me/cosmiclink>
-* Galactic Talk:
-* Reddit:
+* Stellar Slack: [@Mister.Ticot](https://slack.stellar.org/)
+* [Telegram Group](https://t.me/cosmiclink)
+* [Galactic Talk Thread]()
+* [Reddit Post]()
 
 
 ### Releases
@@ -239,23 +259,24 @@ Note: you may want to sanitize fields/operation/arguments using
 This is a beta release, some compatibility-breaking changes are to be expected.
 The minor version number will jump by ten when this will happen.
 
- * GitHub repository: <https://github.com/MisterTicot/js-cosmic-lib>
- * NPM package: <https://npmjs.com/cosmic-lib>
- * Task list: <https://github.com/MisterTicot/js-cosmic-lib-src/blob/master/TODO.md>
+ * [GitHub repository](https://github.com/MisterTicot/js-cosmic-lib)
+ * [NPM package](https://npmjs.com/cosmic-lib)
+ * [Yarn package](https://yarn.pm/cosmic-lib)
+ * [Task list](https://github.com/MisterTicot/js-cosmic-lib-src/blob/master/TODO.md)
 
 
 ### Documentation
 
- * Complete documentation: <https://github.com/MisterTicot/js-cosmic-lib/docs>
- * Cosmic queries specification: <https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-specifications.html>
- * Cosmic queries cheatsheet: <https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet2.md>
- * CosmicLink class cheatsheet: <https://github.com/MisterTicot/js-cosmic-lib/docs/tutorial-cheatsheet.md>
+ * [Complete documentation](https://misterticot.github.io/js-cosmic-lib/docs/CosmicLink.html)
+ * [Cosmic queries specification](https://misterticot.github.io/js-cosmic-lib/docs/tutorial-specifications.html)
+ * [Cosmic queries cheatsheet](https://misterticot.github.io/js-cosmic-lib/docs/tutorial-cheatsheet2.html)
+ * [CosmicLink class cheatsheet](https://misterticot.github.io/js-cosmic-lib/docs/tutorial-cheatsheet.html)
 
 
 ### Related tools
 
- * Demo page: <https://misterticot.github.io/js-cosmic-lib/demo.html>
- * Debug page: <https://misterticot.github.io/js-cosmic-lib/debug.html>
+ * [Demo page](https://misterticot.github.io/js-cosmic-lib/demo.html)
+ * [Debug page](https://misterticot.github.io/js-cosmic-lib/debug.html)
 
 
 ### Related articles
@@ -272,8 +293,7 @@ The minor version number will jump by ten when this will happen.
 ## Contribute
 
 `js-cosmic-lib` is a free software. You are very welcome to contribute by
-whatever means you'd like. Donation are also possible at [tips*cosmic.link]
-(https://cosmic.link/?payment&memo=Donation&destination=tips*cosmic.link&amount=100)
+whatever means you'd like. Donation are also possible at [tips*cosmic.link](https://cosmic.link/?payment&memo=Donation&destination=tips*cosmic.link&amount=100)
 
 
 ## Thank you :)
