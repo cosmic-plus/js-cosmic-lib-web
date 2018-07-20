@@ -248,10 +248,9 @@ Note: you may want to sanitize fields/operation/arguments using
 
 ### Support
 
+* [Galactic Talk](https://galactictalk.org/d/1519-release-js-cosmic-lib-beta-1-stellar-transactions-into-url-and-qr)
+* [Telegram](https://t.me/cosmiclink)
 * Stellar Slack: [@Mister.Ticot](https://slack.stellar.org/)
-* [Telegram Group](https://t.me/cosmiclink)
-* [Galactic Talk Thread]()
-* [Reddit Post]()
 
 
 ### Releases
@@ -298,5 +297,5 @@ whatever means you'd like. Donation are also possible at [tips*cosmic.link](http
 
 ## Thank you :)
 
-Especially to: Torkus, Dhzam, StellarGuard, Zac and Umbre1.
+Especially to: Torkus, Dhzam, StellarGuard, Zac and Umbrel.
 And to the Stellar Foundation for supporting my work.
