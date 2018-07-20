@@ -1,5 +1,8 @@
-.baberc
+.**
+**.config.js
+cosmic-lib.css
 debug**
+demo**
+docs
 jsdoc.json
 src
-webpack.config.js
