@@ -1,0 +1,25 @@
+{
+  "name": "cosmic-lib",
+  "version": "0.10.0",
+  "homepage": "https://github.com/MisterTicot/js-cosmic-lib",
+  "authors": [ "Mister.Ticot" ],
+  "licence": "MIT",
+  "description": "A javaScript implementation of the Cosmic Link protocol",
+  "keywords": [ "cryptocurrency", "stellar", "cosmic", "link", "library" ],
+  "main": "cosmic-lib.js",
+  "ignore": [
+    ".**",
+    "**.config.js",
+    "cosmic-lib.css",
+    "debug**",
+    "demo**",
+    "docs",
+    "jsdoc.json",
+    "node_modules",
+    "package**",
+    "src"
+  ],
+  "dependencies": {
+    "stellar-sdk": ">=0.9.2"
+  }
+}
