@@ -11,7 +11,7 @@
     "build-docs": "jsdoc -c jsdoc.json -u src/docs",
     "build-html": "cp -f src/extra/*.html .",
     "build": "webpack -p && npm run build-css && npm run build-html && npm run build-docs",
-    "check": "npm install && npm run get-src && npm run build && git status",
+    "check": "npm ci && npm run get-src && npm run build && git status",
     "watch": "webpack -d --watch",
     "serve": "npm run watch & live-server --no-browser --ignore='**/node_modules/**,**/src/**,**/docs/**'"
   },
