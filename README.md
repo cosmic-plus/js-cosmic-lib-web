@@ -280,7 +280,8 @@ The minor version number will jump by ten when this will happen.
 
 ### Related articles
 
-* 22 jan 2018: [A standardized way of handling Stellar transactions](https://steemit.com/crypto/@mister.ticot/a-standardized-way-of-handling-stellar-transactions)
+* 26 Jul 2018: [Understanding Cosmic Links](https://medium.com/@mister.ticot/understanding-cosmic-links-ee2ace259671)
+* 22 Jan 2018: [A standardized way of handling Stellar transactions](https://steemit.com/crypto/@mister.ticot/a-standardized-way-of-handling-stellar-transactions)
 
 
 ### Services that implement cosmic links
