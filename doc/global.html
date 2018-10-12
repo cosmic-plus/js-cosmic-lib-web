@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>action.js - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,199 +29,215 @@
 
 <div id="main">
     
-    <h1 class="page-title">action.js</h1>
+    <h1 class="page-title">Global</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
-/**
- * Contains the action methods for CosmicLink.
- *
- * @private
- * @exports action
- */
-const action = exports
+        <h2>
+        
+        </h2>
+        
+    
+</header>
 
-const env = require('@cosmic-plus/jsutils/env')
-const helpers = require('@cosmic-plus/jsutils/misc')
-const StellarGuard = require('@stellarguard/sdk')
+<article>
+    <div class="container-overview">
+    
+        
 
-const convert = require('./convert')
-const config = require('./config')
-const format = env.isBrowser &amp;&amp; require('./format')
-const resolve = require('./resolve')
-const signersUtils = require('./signers-utils')
-const status = require('./status')
+        
 
-/**
- * Lock a CosmicLink to a network/source pair. The actual values for this pair
- * are defined by the transaction itself, or at parsing time for Transaction &amp;
- * XDR formats, or by this lock method, or by the global configuration.
- *
- * Locking is an asynchronous operation and resolves the transaction's federated
- * addresses if any. It also fetchs required accounts data to handle the
- * transaction signers properly. For this reason, it is mandatory before
- * signing and sending a transaction to the blockchain.
- *
- * @example
- * const cosmicLink = new CosmicLink({ memo: 'Demo', network: 'test' })
- * await cosmicLink.lock({ network: 'public' })
- * console.log(cosmicLink.network)   // => 'test'
- *
- * @alias CosmicLink#lock
- * @async
- * @param {Object} [options]
- * @param {string} options.network The fallback network in case transaction doesn't provides one.
- * @param {string} options.source The fallback address in case transaction doesn't provides one.
- */
-action.lock = async function (cosmicLink, options = {}) {
-  if (cosmicLink.status) throw new Error(cosmicLink.status)
-  if (cosmicLink.locker) throw new Error('CosmicLink is already locked.')
 
-  try {
-    await applyLock(cosmicLink, options)
-  } catch (error) {
-    if (!cosmicLink.errors) {
-      console.error(error)
-      status.error(cosmicLink, error.message)
-    }
-    status.fail(cosmicLink, 'Transaction build failed', 'throw')
-  }
+<dl class="details">
 
-  updateSignersNode(cosmicLink)
+    
 
-  return cosmicLink
-}
+    
 
-async function applyLock (cosmicLink, options) {
-  /**
-   * The locker property tells that a CosmicLink have been locked, and exposes
-   * the network &amp; source values to which it have been locked.
-   *
-   * @alias CosmicLink#locker
-   */
-  cosmicLink.locker = {
-    source: cosmicLink.tdesc.source || options.source || config.source,
-    network: cosmicLink.tdesc.network || options.network || config.network
-  }
+    
 
-  /// Preserve the underlying tdesc object.
-  cosmicLink._tdesc = Object.assign({}, cosmicLink.tdesc, cosmicLink.locker)
-  delete cosmicLink._query
-  delete cosmicLink._json
+    
 
-  if (!cosmicLink._transaction) {
-    cosmicLink._transaction = await convert.tdescToTransaction(cosmicLink, cosmicLink.tdesc)
-    delete cosmicLink._tdesc
-  }
+    
 
-  delete cosmicLink._transaction._cosmicplus
-  await signersUtils.extends(cosmicLink, cosmicLink._transaction)
-}
+    
 
-/**
- * Sign CosmicLink's Transaction with **keypairs_or_preimage** and update the
- * other formats accordingly. Only legit signers are allowed to sign, and a
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before signing.
- *
- * @alias CosmicLink#sign
- * @param {...Keypair|Buffer|string} ...keypairs_or_preimage
- */
-action.sign = async function (cosmicLink, ...keypairsOrPreimage) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  resolve.useNetwork(cosmicLink)
+    
 
-  const transaction = cosmicLink.transaction
-  let allFine = true
+    
 
-  if (typeof keypairsOrPreimage[0] !== 'string') {
-    for (let index in keypairsOrPreimage) {
-      const keypair = keypairsOrPreimage[index]
-      const publicKey = keypair.publicKey()
+    
 
-      if (!cosmicLink.transaction.hasSigner(publicKey)) {
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Not a legit signer: ' + short)
-        allFine = false
-        continue
-      }
+    
 
-      if (cosmicLink.transaction.hasSigned(publicKey)) continue
+    
 
-      try {
-        transaction.sign(keypair)
-      } catch (error) {
-        console.error(error)
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Failed to sign with key: ' + short)
-        allFine = false
-        continue
-      }
-    }
-  } else {
-    try {
-      transaction.signHashX(keypairsOrPreimage[0])
-    } catch (error) {
-      console.error(error)
-      const short = helpers.shorter(keypairsOrPreimage[0])
-      status.error(cosmicLink, 'Failed to sign with preimage: ' + short, 'throw')
-    }
-  }
+    
 
-  /// Update other formats.
-  ['_query', '_xdr', '_sep7'].forEach(format => delete cosmicLink[format])
-  updateSignersNode(cosmicLink)
+    
 
-  if (!allFine) throw new Error('Some signers where invalid')
-  else return transaction
-}
+    
 
-function updateSignersNode (cosmicLink) {
-  if (cosmicLink._signersNode) {
-    const signersNode = format.signatures(cosmicLink, cosmicLink._transaction)
-    cosmicLink.htmlDescription.replaceChild(signersNode, cosmicLink._signersNode)
-    cosmicLink._signersNode = signersNode
-  }
-}
+    
 
-/**
- * Send CosmicLink's transaction to a blockchain validator, or to
- * [StellarGuard]{@link https://stellarguard.me} when relevant. A
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before sending.
- *
- * Returns a promise that resolve/reject to the horizon server response.
- *
- * @example
- * cosmicLink.send()
- *   .then(console.log)
- *   .catch(console.error)
- *
- * @alias CosmicLink#send
- * @param {horizon} [horizon] An horizon node URL
- * @return {Object} The server response
- */
-action.send = async function (cosmicLink, horizon = cosmicLink.horizon) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  const server = resolve.server(cosmicLink, horizon)
-  const account = await resolve.account(cosmicLink, cosmicLink.source)
+    
+</dl>
 
-  if (StellarGuard.hasStellarGuard(account)) {
-    if (cosmicLink.network === 'public') StellarGuard.usePublicNetwork()
-    else StellarGuard.useTestNetwork()
-    return StellarGuard.submitTransaction(cosmicLink.transaction)
-  } else {
-    return server.submitTransaction(cosmicLink.transaction)
-  }
-}
-</code></pre>
-        </article>
-    </section>
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="withConfig"><span class="type-signature"></span>withConfig<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Create a clone of the library with an alternative config object derived from
+<strong>params</strong>. Fields which are not defined in <strong>params</strong> stay in sync with parent
+configuration.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>A clone of cosmicLib</p>
+</div>
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>const testnet = cosmicLib.withConfig({ network: 'test' })
+const account = await testnet.resolve.account('tips*cosmic.link')</code></pre>
+
+</div>
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

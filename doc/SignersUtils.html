@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>specs - Documentation</title>
+    <title>SignersUtils - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">specs</h1>
+    <h1 class="page-title">SignersUtils</h1>
     
 
     
@@ -41,8 +41,43 @@
 
 <header>
     
+        <h2>
+        SignersUtils
+        </h2>
         
-            
+            <div class="class-description"><p><strong>SignersUtils</strong> is a toolbox that aims to ease the handling of
+multisignature transactions. The idea behind it is to fetch all required
+data once and to cache the responses into the transaction. Then, all
+the utilities can function in a synchronous (immediate) manner.</p>
+<p>Those are automatically available in <code>cosmicLink.transaction</code> after
+<code>await cosmicLink.lock()</code> is ran. Alternatively, you can extend a transaction
+or generate its SignersUtils by using <a href="module-signersUtils.html">module:signersUtils</a>. There's no
+<code>cosmicLib.SignersUtils</code> constructor.</p>
+<p>An instance of SignersUtils is always tied to a given transaction. This is
+why none of the provided methods take a transaction as parameter.</p>
+<blockquote>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Members</th>
+<th>Methods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="SignersUtils.html#sources">sources</a>: Array of transaction sources</td>
+<td><a href="SignersUtils.html#hasSigner">hasSigner</a>: Test if a key is a legit signer for transaction</td>
+</tr>
+<tr>
+<td><a href="SignersUtils.html#signers">signers</a>: Table of transaction signers</td>
+<td><a href="SignersUtils.html#hasSigned">hasSigned</a>: Test if a key has signed transaction</td>
+</tr>
+<tr>
+<td><a href="SignersUtils.html#signersList">signersList</a>: Array of transaction signers</td>
+</tr>
+</tbody>
+</table></div>
         
     
 </header>
@@ -51,17 +86,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Contains Stellar transactions specification.</p></div>
-        
 
         
-            
-<div class="section-method">
-
-
-
-
-
 
 
 <dl class="details">
@@ -93,7 +119,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line7">line 7</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -105,28 +131,17 @@
 </dl>
 
 
+        
+            <h3>Example</h3>
+            
+    <pre class="prettyprint"><code>const cosmicLink = new CosmicLink({ memo: 'Donation', maxDate: 2019 })
+ .addOperation('payment', { destination: 'tips*cosmic.link', amount: 10 })
 
+await cosmicLink.lock({ network: 'test', source: 'myaddress*example.org' })
 
+console.log(cosmicLink.transaction.signers)
+console.log(cosmicLink.transaction.hasSigner(GB...DXEZ))</code></pre>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
         
     
     </div>
@@ -147,13 +162,13 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".fieldDesc"><span class="type-signature">(static) </span>fieldDesc<span class="type-signature"></span></h4>
+<h4 class="name" id="signers"><span class="type-signature"></span>signers<span class="type-signature"> :Object</span></h4>
 
 
 
 
 <div class="description">
-    <p>Transaction field meaning.</p>
+    <p>A table of the signers for each transaction source.</p>
 </div>
 
 
@@ -189,7 +204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line137">line 137</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -201,6 +216,16 @@
 </dl>
 
 
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -211,13 +236,13 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".fieldType"><span class="type-signature">(static) </span>fieldType<span class="type-signature"></span></h4>
+<h4 class="name" id="signersList"><span class="type-signature"></span>signersList<span class="type-signature"> :Array</span></h4>
 
 
 
 
 <div class="description">
-    <p>Field types.</p>
+    <p>A list of the legit signers for the transaction.</p>
 </div>
 
 
@@ -253,7 +278,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line84">line 84</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -265,6 +290,16 @@
 </dl>
 
 
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Array</code></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -275,14 +310,13 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".neutralAccountId"><span class="type-signature">(static) </span>neutralAccountId<span class="type-signature"></span></h4>
+<h4 class="name" id="sources"><span class="type-signature"></span>sources<span class="type-signature"> :Array</span></h4>
 
 
 
 
 <div class="description">
-    <p>A neutral account ID meant to be replaced before signing &amp; sending the
-transaction.</p>
+    <p>A list of the sources involved in the transaction.</p>
 </div>
 
 
@@ -318,7 +352,7 @@ transaction.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line162">line 162</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -331,453 +365,15 @@ transaction.</p>
 
 
 
-
-
-
-
-</div>
-
-        
+    <h5>Type:</h5>
+    <ul>
+        <li>
             
-<div class="section-members">
-<h4 class="name" id=".operationFields"><span class="type-signature">(static) </span>operationFields<span class="type-signature"></span></h4>
+<span class="param-type"><code>Array</code></span>
 
 
-
-
-<div class="description">
-    <p>Operations fields</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line66">line 66</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".operationMandatoryFields"><span class="type-signature">(static) </span>operationMandatoryFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Operation mandatory fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".operationOptionalFields"><span class="type-signature">(static) </span>operationOptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Operation optionnal fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".sep7MandatoryFields"><span class="type-signature">(static) </span>sep7MandatoryFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>The mandatory fields for each SEP-0007 operation.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line167">line 167</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".sep7OptionalFields"><span class="type-signature">(static) </span>sep7OptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>The optional fields for each SEP-0007 operation.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line175">line 175</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".transactionOptionalFields"><span class="type-signature">(static) </span>transactionOptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Transaction optional fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line12">line 12</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".types"><span class="type-signature">(static) </span>types<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>An array of each valid type for fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line151">line 151</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
+        </li>
+    </ul>
 
 
 
@@ -797,11 +393,15 @@ transaction.</p>
 
     
 
-    <h4 class="name" id=".isOperationField"><span class="type-signature">(static) </span>isOperationField<span class="signature">(type, field)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="hasSigned"><span class="type-signature"></span>hasSigned<span class="signature">(accountId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
 
+
+<div class="description">
+    <p>Tests if <strong>accountId</strong> has signed the transaction.</p>
+</div>
 
 
 
@@ -836,7 +436,7 @@ transaction.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line77">line 77</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line123">line 123</a>
     </li></ul></dd>
     
 
@@ -880,33 +480,7 @@ transaction.</p>
 
         <tr>
             
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Operation type</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>field</code></td>
+                <td class="name"><code>accountId</code></td>
             
 
             <td class="type">
@@ -967,6 +541,13 @@ transaction.</p>
 </div>
 
 
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>if (transaction.hasSigned(GB...DEZX)) console.log('Has signed')</code></pre>
+
+</div>
 
 </div>
         
@@ -975,11 +556,15 @@ transaction.</p>
 
     
 
-    <h4 class="name" id=".isTransactionField"><span class="type-signature">(static) </span>isTransactionField<span class="signature">(field)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="hasSigner"><span class="type-signature"></span>hasSigner<span class="signature">(accountId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
 
+
+<div class="description">
+    <p>Tests if <strong>accountId</strong> is a legit signer for the transaction.</p>
+</div>
 
 
 
@@ -1014,7 +599,7 @@ transaction.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line21">line 21</a>
+        <a href="signers-utils.js.html">signers-utils.js</a>, <a href="signers-utils.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -1058,7 +643,7 @@ transaction.</p>
 
         <tr>
             
-                <td class="name"><code>field</code></td>
+                <td class="name"><code>accountId</code></td>
             
 
             <td class="type">
@@ -1119,6 +704,13 @@ transaction.</p>
 </div>
 
 
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>if (transaction.hasSigner(GB...DEZX)) console.log('Legit signer')</code></pre>
+
+</div>
 
 </div>
         

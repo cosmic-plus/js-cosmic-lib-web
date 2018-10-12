@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>action.js - Documentation</title>
+    <title>resolve.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">action.js</h1>
+    <h1 class="page-title">resolve.js</h1>
     
 
     
@@ -41,183 +41,282 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 /**
- * Contains the action methods for CosmicLink.
+ * Contains functions that probe the blockchain or federation servers to collect
+ * datas.
  *
- * @private
- * @exports action
+ * @exports resolve
  */
-const action = exports
+const resolve = exports
 
-const env = require('@cosmic-plus/jsutils/env')
 const helpers = require('@cosmic-plus/jsutils/misc')
-const StellarGuard = require('@stellarguard/sdk')
+const StellarSdk = require('@cosmic-plus/base/stellar-sdk')
 
-const convert = require('./convert')
-const config = require('./config')
-const format = env.isBrowser &amp;&amp; require('./format')
-const resolve = require('./resolve')
-const signersUtils = require('./signers-utils')
+const specs = require('./specs')
 const status = require('./status')
 
 /**
- * Lock a CosmicLink to a network/source pair. The actual values for this pair
- * are defined by the transaction itself, or at parsing time for Transaction &amp;
- * XDR formats, or by this lock method, or by the global configuration.
+ * Returns the
+ * [Server]{@link https://stellar.github.io/js-stellar-sdk/Server.html} object
+ * for **horizon**, or for **network**, or for the current network.
  *
- * Locking is an asynchronous operation and resolves the transaction's federated
- * addresses if any. It also fetchs required accounts data to handle the
- * transaction signers properly. For this reason, it is mandatory before
- * signing and sending a transaction to the blockchain.
+ * @param {string} [network] 'public', 'test' or a network passphrase
+ * @param {string} [horizon] A horizon URL
+ * @returns {Server} A StellarSdk Server object
+ */
+resolve.server = function (conf, network = conf.network, horizon = conf.horizon) {
+  if (!horizon) {
+    const passphrase = resolve.networkPassphrase(conf, network)
+    if (!passphrase) throw new Error('No network selected.')
+    horizon = conf.current.horizon[passphrase]
+    if (!horizon) throw new Error('No horizon node defined for selected network.')
+  }
+  if (!conf.current.server[horizon]) conf.current.server[horizon] = new StellarSdk.Server(horizon)
+  return conf.current.server[horizon]
+}
+
+/**
+ * Switch to the current network, or to **network** if provided.
  *
- * @example
- * const cosmicLink = new CosmicLink({ memo: 'Demo', network: 'test' })
- * await cosmicLink.lock({ network: 'public' })
- * console.log(cosmicLink.network)   // => 'test'
+ * @param {string} [network] 'public', 'test' or a network passphrase
+ * @returns {Server} A StellarSdk Server object
+ */
+resolve.useNetwork = function (conf, network = conf.network) {
+  const passphrase = resolve.networkPassphrase(conf, network)
+  const currentPassphrase = resolve.networkPassphrase()
+  if (passphrase !== currentPassphrase) {
+    console.log('Switch to network: ' + network)
+    StellarSdk.Network.use(new StellarSdk.Network(passphrase))
+  }
+}
+
+/**
+ * Returns the curent Horizon node URL, or the Horizon node URL for **network**
+ * if provided.
  *
- * @alias CosmicLink#lock
+ * @param {string} [network] A network name or passphrase.
+ */
+resolve.horizon = function (conf, network = conf.network) {
+  const passphrase = resolve.networkPassphrase(conf, network)
+  return conf.current.horizon[passphrase]
+}
+
+/**
+ * Returns the current network passphrase, or the passphrase for **network** is
+ * provided.
+ */
+resolve.networkPassphrase = function (conf = {}, network = conf.network) {
+  if (network) {
+    return conf.current.passphrase[network] || network
+  } else {
+    const currentNetwork = StellarSdk.Network.current()
+    if (currentNetwork) return currentNetwork.networkPassphrase()
+  }
+}
+
+/**
+ * Returns the federation server
+ * [Account]{@link https://stellar.github.io/js-stellar-sdk/Account.html}
+ * for **address**.
+ *
  * @async
- * @param {Object} [options]
- * @param {string} options.network The fallback network in case transaction doesn't provides one.
- * @param {string} options.source The fallback address in case transaction doesn't provides one.
+ * @param {string} address A Stellar public key or a federated address
+ * @return {} Resolve to federation server response
  */
-action.lock = async function (cosmicLink, options = {}) {
-  if (cosmicLink.status) throw new Error(cosmicLink.status)
-  if (cosmicLink.locker) throw new Error('CosmicLink is already locked.')
+resolve.address = function (conf, address) {
+  const cache = conf.cache
+  if (cache &amp;&amp; cache.destination[address]) return cache.destination[address]
 
+  const promise = addressResolver(conf, address)
+  if (cache) cache.destination[address] = promise
+  return promise
+}
+
+async function addressResolver (conf, address) {
   try {
-    await applyLock(cosmicLink, options)
+    const account = await StellarSdk.FederationServer.resolve(address)
+    const accountId = account.account_id
+    if (!accountId) throw new Error('Unknow address')
+    if (!account.memo_type) delete account.memo
+    if (address !== accountId) account.address = address
+    if (conf.aliases &amp;&amp; conf.aliases[accountId]) {
+      account.alias = conf.aliases[accountId]
+    }
+    return account
   } catch (error) {
-    if (!cosmicLink.errors) {
-      console.error(error)
-      status.error(cosmicLink, error.message)
-    }
-    status.fail(cosmicLink, 'Transaction build failed', 'throw')
-  }
-
-  updateSignersNode(cosmicLink)
-
-  return cosmicLink
-}
-
-async function applyLock (cosmicLink, options) {
-  /**
-   * The locker property tells that a CosmicLink have been locked, and exposes
-   * the network &amp; source values to which it have been locked.
-   *
-   * @alias CosmicLink#locker
-   */
-  cosmicLink.locker = {
-    source: cosmicLink.tdesc.source || options.source || config.source,
-    network: cosmicLink.tdesc.network || options.network || config.network
-  }
-
-  /// Preserve the underlying tdesc object.
-  cosmicLink._tdesc = Object.assign({}, cosmicLink.tdesc, cosmicLink.locker)
-  delete cosmicLink._query
-  delete cosmicLink._json
-
-  if (!cosmicLink._transaction) {
-    cosmicLink._transaction = await convert.tdescToTransaction(cosmicLink, cosmicLink.tdesc)
-    delete cosmicLink._tdesc
-  }
-
-  delete cosmicLink._transaction._cosmicplus
-  await signersUtils.extends(cosmicLink, cosmicLink._transaction)
-}
-
-/**
- * Sign CosmicLink's Transaction with **keypairs_or_preimage** and update the
- * other formats accordingly. Only legit signers are allowed to sign, and a
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before signing.
- *
- * @alias CosmicLink#sign
- * @param {...Keypair|Buffer|string} ...keypairs_or_preimage
- */
-action.sign = async function (cosmicLink, ...keypairsOrPreimage) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  resolve.useNetwork(cosmicLink)
-
-  const transaction = cosmicLink.transaction
-  let allFine = true
-
-  if (typeof keypairsOrPreimage[0] !== 'string') {
-    for (let index in keypairsOrPreimage) {
-      const keypair = keypairsOrPreimage[index]
-      const publicKey = keypair.publicKey()
-
-      if (!cosmicLink.transaction.hasSigner(publicKey)) {
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Not a legit signer: ' + short)
-        allFine = false
-        continue
-      }
-
-      if (cosmicLink.transaction.hasSigned(publicKey)) continue
-
-      try {
-        transaction.sign(keypair)
-      } catch (error) {
-        console.error(error)
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Failed to sign with key: ' + short)
-        allFine = false
-        continue
-      }
-    }
-  } else {
-    try {
-      transaction.signHashX(keypairsOrPreimage[0])
-    } catch (error) {
-      console.error(error)
-      const short = helpers.shorter(keypairsOrPreimage[0])
-      status.error(cosmicLink, 'Failed to sign with preimage: ' + short, 'throw')
-    }
-  }
-
-  /// Update other formats.
-  ['_query', '_xdr', '_sep7'].forEach(format => delete cosmicLink[format])
-  updateSignersNode(cosmicLink)
-
-  if (!allFine) throw new Error('Some signers where invalid')
-  else return transaction
-}
-
-function updateSignersNode (cosmicLink) {
-  if (cosmicLink._signersNode) {
-    const signersNode = format.signatures(cosmicLink, cosmicLink._transaction)
-    cosmicLink.htmlDescription.replaceChild(signersNode, cosmicLink._signersNode)
-    cosmicLink._signersNode = signersNode
+    console.error(error)
+    status.error(conf, "Can't resolve: " + helpers.shorter(address))
+    status.fail(conf, 'Unresolved address', 'throw')
   }
 }
 
 /**
- * Send CosmicLink's transaction to a blockchain validator, or to
- * [StellarGuard]{@link https://stellarguard.me} when relevant. A
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before sending.
+ * Returns the
+ * [AccountResponse]{@link https://stellar.github.io/js-stellar-sdk/AccountResponse.html}
+ * object for **address**.
  *
- * Returns a promise that resolve/reject to the horizon server response.
- *
- * @example
- * cosmicLink.send()
- *   .then(console.log)
- *   .catch(console.error)
- *
- * @alias CosmicLink#send
- * @param {horizon} [horizon] An horizon node URL
- * @return {Object} The server response
+ * @param {string} address A public key or a federated address
+ * @return {Object} The AccountResponse
  */
-action.send = async function (cosmicLink, horizon = cosmicLink.horizon) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  const server = resolve.server(cosmicLink, horizon)
-  const account = await resolve.account(cosmicLink, cosmicLink.source)
+resolve.account = async function (conf, address, quietFlag) {
+  const account = await resolve.address(conf, address)
+  const accountId = account.account_id
+  const cache = conf.cache
+  if (cache &amp;&amp; cache.account[accountId]) return cache.account[accountId]
 
-  if (StellarGuard.hasStellarGuard(account)) {
-    if (cosmicLink.network === 'public') StellarGuard.usePublicNetwork()
-    else StellarGuard.useTestNetwork()
-    return StellarGuard.submitTransaction(cosmicLink.transaction)
-  } else {
-    return server.submitTransaction(cosmicLink.transaction)
+  const promise = accountResolver(conf, accountId, quietFlag)
+  if (cache) cache.account[accountId] = promise
+  return promise
+}
+
+async function accountResolver (conf, accountId, quietFlag) {
+  const server = resolve.server(conf)
+  try {
+    const accountResponse = await server.loadAccount(accountId)
+    return accountResponse
+  } catch (error) {
+    if (quietFlag) {
+      throw error
+    } else {
+      console.error(error)
+      status.error(conf, 'Empty account: ' + helpers.shorter(accountId), 'throw')
+    }
   }
+}
+
+/**
+ * Returns `true` if **address** account is empty, `false` otherwise.
+ *
+ * @async
+ * @param {string} address Public key or federated address
+ * @return {boolean}
+ */
+resolve.isAccountEmpty = function (conf, address) {
+  return resolve.account(conf, address, true).then(x => false).catch(x => true)
+}
+
+/**
+ * Returns the account object for transaction source **address`** with sequence
+ * set at **sequence** if provided. If **address** is not provided, returns the
+ * neutral account object instead (as in SEP-0007 specifications).
+ *
+ * @param {string} [address]
+ * @param {string|numbre} [sequence]
+ * @return {AccountResponse}
+ */
+resolve.txSourceAccount = async function (conf, address, sequence) {
+  if (!address) {
+    const neutralAccount = new StellarSdk.Account(specs.neutralAccountId, '-1')
+    neutralAccount.signers = []
+    if (conf.cache) {
+      conf.cache.account[specs.neutralAccountId] = neutralAccount
+    }
+    return neutralAccount
+  } else {
+    const destination = await resolve.address(conf, address)
+    if (destination.memo) status.error(conf, 'Invalid transaction source address (requires a memo)', 'throw')
+    const account = await resolve.account(conf, destination.account_id)
+    if (sequence) {
+      const baseAccount = new StellarSdk.Account(account.id, sequence)
+      baseAccount.sequence = baseAccount.sequence.sub(1)
+      account._baseAccount = baseAccount
+    }
+    return account
+  }
+}
+
+/**
+ * Returns the array of all source accounts ID involved in **transaction**.
+ *
+ * @param {Transaction} transaction
+ * @return {Array}
+ */
+resolve.txSources = function (conf, transaction) {
+  if (!transaction.source) throw new Error('No source for transaction')
+
+  const extra = resolve.extra(conf, transaction)
+  if (extra.cache.txSources) return extra.cache.txSources
+
+  const array = extra.cache.txSources = [ transaction.source ]
+  for (let index in transaction.operations) {
+    const source = transaction.operations[index].source
+    if (source &amp;&amp; !array.find(a => a === source)) array.push(source)
+  }
+
+  return array
+}
+
+/**
+ * Returns an object such as:
+ *
+ * ```js
+ * {
+ *    $accountId: $accountSigners
+ *    ...
+ * }
+ * ```
+ *
+ * @param {Transaction} transaction
+ * @return {Object}
+ */
+resolve.txSigners = async function (conf, transaction) {
+  const extra = resolve.extra(conf, transaction)
+  if (extra.cache.txSigners) return extra.cache.txSigners
+
+  const txSources = resolve.txSources(extra, transaction)
+  const signers = extra.cache.txSigners = {}
+
+  for (let index in txSources) {
+    const source = txSources[index]
+    const account = await resolve.account(extra, source)
+    if (!signers[account.id]) {
+      signers[account.id] = account.signers.filter(signer => {
+        return signer.type !== 'preauthTx'
+      })
+    }
+  }
+
+  return signers
+}
+
+/**
+ * Returns an Array containing the keys for all legit signers of **transaction**.
+ *
+ * @param {Transaction} transaction
+ * @return {Array}
+ */
+resolve.txSignersList = async function (conf, transaction) {
+  const extra = resolve.extra(conf, transaction)
+  if (!extra.cache.txSignersList) {
+    const txSigners = await resolve.txSigners(extra, transaction)
+    extra.cache.txSignersList = signersTableToSignersList(txSigners)
+  }
+  return extra.cache.txSignersList
+}
+
+function signersTableToSignersList (signersTable) {
+  const array = []
+  for (let accountId in signersTable) {
+    signersTable[accountId].forEach(signer => {
+      if (!array.find(key => key === signer.key)) array.push(signer.key)
+    })
+  }
+  return array
+}
+
+/**
+ * Add an extra field to **object** that embed cache and local configuration.
+ *
+ * @private
+ */
+resolve.extra = function (conf, object) {
+  if (!object._cosmicplus) {
+    helpers.setHiddenProperty(object, '_cosmicplus', {})
+    if (conf.cache) object._cosmicplus.cache = conf.cache
+    else object._cosmicplus.cache = { destination: {}, account: {} }
+    object._cosmicplus.network = conf.network
+    object._cosmicplus.current = conf.current
+  }
+  return object._cosmicplus
 }
 </code></pre>
         </article>

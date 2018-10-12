@@ -1,6 +1,6 @@
 {
   "name": "cosmic-lib",
-  "description": "A javaScript implementation of the Cosmic Link protocol",
+  "description": "A javaScript implementation of the CosmicLink protocol",
   "keywords": [ "cryptocurrency", "stellar", "cosmic", "link", "library" ],
   "homepage": "https://github.com/MisterTicot/js-cosmic-lib",
   "authors": [ "Mister.Ticot" ],
@@ -8,6 +8,6 @@
   "main": "cosmic-lib.js",
   "ignore": [ ".**", "package-lock.json", "doc" ],
   "dependencies": {
-    "stellar-sdk": ">=0.10.2"
+    "stellar-sdk": ">=0.11"
   }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>action.js - Documentation</title>
+    <title>check.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">action.js</h1>
+    <h1 class="page-title">check.js</h1>
     
 
     
@@ -41,184 +41,281 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 /**
- * Contains the action methods for CosmicLink.
+ * Provide checks for varous type of field used in cosmic links.
+ *
+ * This module may no be type-complete and new type checks got added only when
+ * needed.
+ *
+ * The check apply on values using the cosmic link JSON format.
  *
  * @private
- * @exports action
+ * @exports check
  */
-const action = exports
+const check = exports
 
-const env = require('@cosmic-plus/jsutils/env')
 const helpers = require('@cosmic-plus/jsutils/misc')
-const StellarGuard = require('@stellarguard/sdk')
 
-const convert = require('./convert')
-const config = require('./config')
-const format = env.isBrowser &amp;&amp; require('./format')
-const resolve = require('./resolve')
-const signersUtils = require('./signers-utils')
+const specs = require('./specs')
 const status = require('./status')
 
-/**
- * Lock a CosmicLink to a network/source pair. The actual values for this pair
- * are defined by the transaction itself, or at parsing time for Transaction &amp;
- * XDR formats, or by this lock method, or by the global configuration.
- *
- * Locking is an asynchronous operation and resolves the transaction's federated
- * addresses if any. It also fetchs required accounts data to handle the
- * transaction signers properly. For this reason, it is mandatory before
- * signing and sending a transaction to the blockchain.
- *
- * @example
- * const cosmicLink = new CosmicLink({ memo: 'Demo', network: 'test' })
- * await cosmicLink.lock({ network: 'public' })
- * console.log(cosmicLink.network)   // => 'test'
- *
- * @alias CosmicLink#lock
- * @async
- * @param {Object} [options]
- * @param {string} options.network The fallback network in case transaction doesn't provides one.
- * @param {string} options.source The fallback address in case transaction doesn't provides one.
- */
-action.lock = async function (cosmicLink, options = {}) {
-  if (cosmicLink.status) throw new Error(cosmicLink.status)
-  if (cosmicLink.locker) throw new Error('CosmicLink is already locked.')
-
-  try {
-    await applyLock(cosmicLink, options)
-  } catch (error) {
-    if (!cosmicLink.errors) {
-      console.error(error)
-      status.error(cosmicLink, error.message)
-    }
-    status.fail(cosmicLink, 'Transaction build failed', 'throw')
-  }
-
-  updateSignersNode(cosmicLink)
-
-  return cosmicLink
-}
-
-async function applyLock (cosmicLink, options) {
-  /**
-   * The locker property tells that a CosmicLink have been locked, and exposes
-   * the network &amp; source values to which it have been locked.
-   *
-   * @alias CosmicLink#locker
-   */
-  cosmicLink.locker = {
-    source: cosmicLink.tdesc.source || options.source || config.source,
-    network: cosmicLink.tdesc.network || options.network || config.network
-  }
-
-  /// Preserve the underlying tdesc object.
-  cosmicLink._tdesc = Object.assign({}, cosmicLink.tdesc, cosmicLink.locker)
-  delete cosmicLink._query
-  delete cosmicLink._json
-
-  if (!cosmicLink._transaction) {
-    cosmicLink._transaction = await convert.tdescToTransaction(cosmicLink, cosmicLink.tdesc)
-    delete cosmicLink._tdesc
-  }
-
-  delete cosmicLink._transaction._cosmicplus
-  await signersUtils.extends(cosmicLink, cosmicLink._transaction)
-}
-
-/**
- * Sign CosmicLink's Transaction with **keypairs_or_preimage** and update the
- * other formats accordingly. Only legit signers are allowed to sign, and a
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before signing.
- *
- * @alias CosmicLink#sign
- * @param {...Keypair|Buffer|string} ...keypairs_or_preimage
- */
-action.sign = async function (cosmicLink, ...keypairsOrPreimage) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  resolve.useNetwork(cosmicLink)
-
-  const transaction = cosmicLink.transaction
-  let allFine = true
-
-  if (typeof keypairsOrPreimage[0] !== 'string') {
-    for (let index in keypairsOrPreimage) {
-      const keypair = keypairsOrPreimage[index]
-      const publicKey = keypair.publicKey()
-
-      if (!cosmicLink.transaction.hasSigner(publicKey)) {
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Not a legit signer: ' + short)
-        allFine = false
-        continue
-      }
-
-      if (cosmicLink.transaction.hasSigned(publicKey)) continue
-
-      try {
-        transaction.sign(keypair)
-      } catch (error) {
-        console.error(error)
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Failed to sign with key: ' + short)
-        allFine = false
-        continue
-      }
-    }
-  } else {
+check.tdesc = function (conf, tdesc) {
+  for (let field in tdesc) {
     try {
-      transaction.signHashX(keypairsOrPreimage[0])
+      check.txField(conf, field, tdesc[field])
     } catch (error) {
-      console.error(error)
-      const short = helpers.shorter(keypairsOrPreimage[0])
-      status.error(cosmicLink, 'Failed to sign with preimage: ' + short, 'throw')
+      tdesc[field] = errDesc(error, tdesc[field])
     }
   }
 
-  /// Update other formats.
-  ['_query', '_xdr', '_sep7'].forEach(format => delete cosmicLink[format])
-  updateSignersNode(cosmicLink)
+  if (tdesc.operations.length > 100) {
+    status.error(conf, 'Too much operations (max 100)')
+  }
 
-  if (!allFine) throw new Error('Some signers where invalid')
-  else return transaction
+  tdesc.operations.forEach(odesc => {
+    try { check.odesc(conf, odesc) } catch (e) {}
+  })
+
+  if (conf.errors) {
+    const error = new Error('Invalid tdesc')
+    error.tdesc = tdesc
+    throw error
+  }
 }
 
-function updateSignersNode (cosmicLink) {
-  if (cosmicLink._signersNode) {
-    const signersNode = format.signatures(cosmicLink, cosmicLink._transaction)
-    cosmicLink.htmlDescription.replaceChild(signersNode, cosmicLink._signersNode)
-    cosmicLink._signersNode = signersNode
+check.odesc = function (conf, odesc) {
+  try {
+    check.operationType(conf, odesc.type)
+  } catch (error) {
+    odesc.type = errDesc(error, odesc.type)
+  }
+
+  for (let field in odesc) {
+    try {
+      check.operationField(conf, odesc.type, field, odesc[field])
+    } catch (error) {
+      odesc[field] = errDesc(error, odesc[field])
+    }
+  }
+
+  specs.operationMandatoryFields[odesc.type].forEach(field => {
+    if (odesc[field] === undefined) {
+      const error = new Error('Missing mandatory field: ' + field)
+      odesc[field] = errDesc(error)
+      status.error(conf, error.message)
+    }
+  })
+
+  if (conf.errors) throw new Error('Invalid odesc')
+}
+
+check.txField = function (conf, field, value) {
+  if (field === 'operations') return
+  if (!specs.transactionOptionalFields.find(name => name === field)) {
+    status.error(conf, 'Invalid transaction field: ' + field, 'throw')
+  }
+  check.field(conf, field, value)
+}
+
+check.operationType = function (conf, type) {
+  if (!specs.operationMandatoryFields[type]) {
+    status.error(conf, 'Invalid operation: ' + type, 'throw')
+  }
+}
+
+check.operationField = function (conf, operation, field, value) {
+  if (field === 'type') return
+  if (!specs.isOperationField(operation, field)) {
+    status.error(conf, `Invalid field for ${operation}: ${field}`, 'throw')
+  }
+  check.field(conf, field, value)
+}
+
+function errDesc (error, value = '') {
+  return { error: error, value: value }
+}
+
+/******************************************************************************/
+
+/**
+ * Check that `field` is a valid transaction/operation field. If `value` is
+ * given, check that it is valid for that `field`. If a check doesn't pass, an
+ * error is throwed.
+ *
+ * @param {string} field
+ * @param {string} [value]
+ */
+check.field = function (conf, field, value) {
+  if (value === '' &amp;&amp; field !== 'homeDomain' &amp;&amp; field !== 'value') {
+    status.error(conf, `Missing value for field: ${field}`, 'throw')
+  }
+
+  const type = specs.fieldType[field]
+  if (!type) status.error(conf, 'Unknow field: ' + field, 'throw')
+  if (value) check.type(conf, type, value)
+}
+
+/**
+ * Check that `type` is a valid transaction/operation field type. If `value` is
+ * given, check that it is valid for that `type`. If a check doesn't pass, an
+ * error is throwed.
+ *
+ * @param {string} type
+ * @param {string} [value]
+ */
+check.type = function (conf, type, value) {
+  if (!specs.types.find(entry => entry === type)) {
+    throw new Error('Invalid type: ' + type)
+  }
+  return check[type](conf, value)
+}
+
+/**
+ * Generic check for numbers. Check that `value` is a number or a string
+ * representing a number. `type` is for the customization of the message in case
+ * of error. `min` and `max` may be provided as additional restriction for
+ * `value`.
+ *
+ * @param {number|string} value
+ * @param {string} [type = 'number']
+ * @param {number|string} [min]
+ * @param {number|string} [max]
+ */
+check.number = function (conf, value, type = 'number', min, max = 'unlimited') {
+  const num = +value
+  if (isNaN(num)) {
+    status.error(conf,
+      `Invalid ${type} (should be a number): ${value}`,
+      'throw'
+    )
+  } else if ((min &amp;&amp; num &lt; min) || (max &amp;&amp; num > max)) {
+    status.error(conf,
+      `Invalid ${type} (should be between ${min} and ${max} ): ${value}`,
+      'throw'
+    )
   }
 }
 
 /**
- * Send CosmicLink's transaction to a blockchain validator, or to
- * [StellarGuard]{@link https://stellarguard.me} when relevant. A
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before sending.
+ * Generic check for integers. Check that `value` is an integer or a string
+ * representing an integer. `type` is for the customization of the message in
+ * case of error. `min` and `max` may be provided as additional restriction for
+ * `value`.
  *
- * Returns a promise that resolve/reject to the horizon server response.
- *
- * @example
- * cosmicLink.send()
- *   .then(console.log)
- *   .catch(console.error)
- *
- * @alias CosmicLink#send
- * @param {horizon} [horizon] An horizon node URL
- * @return {Object} The server response
+ * @param {number|string} value
+ * @param {string} [type = 'integer']
+ * @param {number|string} [min]
+ * @param {number|string} [max]
  */
-action.send = async function (cosmicLink, horizon = cosmicLink.horizon) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  const server = resolve.server(cosmicLink, horizon)
-  const account = await resolve.account(cosmicLink, cosmicLink.source)
-
-  if (StellarGuard.hasStellarGuard(account)) {
-    if (cosmicLink.network === 'public') StellarGuard.usePublicNetwork()
-    else StellarGuard.useTestNetwork()
-    return StellarGuard.submitTransaction(cosmicLink.transaction)
-  } else {
-    return server.submitTransaction(cosmicLink.transaction)
+check.integer = function (conf, value, type = 'integer', min, max) {
+  check.number(conf, value, type, min, max)
+  if (parseInt(value) + '' !== value + '') {
+    status.error(conf, `Not an integer: ${value}`, 'throw')
   }
 }
+
+/******************************************************************************/
+
+check.amount = function (conf, amount) {
+  check.number(conf, amount, 'amount')
+}
+
+check.address = function (conf, address) {
+  if (address.length !== 56 &amp;&amp; !address.match(/.*\*.*\..*/)) {
+    status.error(conf, 'Invalid address: ' + helpers.shorter(address), 'throw')
+  }
+}
+
+check.asset = function (conf, asset) {
+  const code = asset.code.toLowerCase()
+  if (!asset.issuer &amp;&amp; code !== 'xlm' &amp;&amp; code !== 'native') {
+    status.error(conf, 'Missing issuer for asset: ' + code, 'throw')
+  }
+}
+
+check.assetsArray = function (conf, assetsArray) {
+  let isValid = true
+  for (let index in assetsArray) {
+    try {
+      check.asset(conf, assetsArray[index])
+    } catch (error) {
+      console.log(error)
+      isValid = false
+    }
+  }
+  if (!isValid) throw new Error('Invalid assets array')
+}
+
+check.boolean = function (conf, boolean) {
+  if (typeof boolean !== 'boolean') {
+    status.error(conf, 'Invalid boolean: ' + boolean, 'throw')
+  }
+}
+
+check.date = function (conf, date) {
+  if (isNaN(Date.parse(date))) {
+    status.error(conf, 'Invalid date: ' + date, 'throw')
+  }
+}
+
+check.flags = function (conf, flags) {
+  check.integer(conf, flags, 'flags', 0, 7)
+}
+
+check.hash = function (conf, hash) {
+  if (hash.length !== 64 || !hash.match(/[0-9a-f]*/)) {
+    status.error(conf, 'Invalid hash:' + hash, 'throw')
+  }
+}
+
+check.price = function (conf, price) {
+  if (typeof price === 'object') {
+    try {
+      check.price(null, price.n)
+      check.price(null, price.d)
+    } catch (error) {
+      status.error(conf, 'Invalid price: ' + price, 'throw')
+    }
+  } else {
+    check.number(conf, price, 'price', 0)
+  }
+}
+
+check.signer = function (conf, signer) {
+  check.weight(conf, signer.weight)
+  switch (signer.type) {
+    case 'key':
+      check.address(conf, signer.value)
+      break
+    case 'hash':
+    case 'tx':
+      check.hash(conf, signer.value)
+      break
+    default:
+      status.error(conf, 'Invalid signer type: ' + signer.type, 'throw')
+  }
+}
+
+check.sequence = function (conf, sequence) {
+  check.number(conf, sequence, 'sequence', 0)
+}
+
+check.threshold = function (conf, threshold) {
+  check.integer(conf, threshold, 'threshold', 0, 255)
+}
+
+check.weight = function (conf, weight) {
+  check.integer(conf, weight, 'weight', 0, 255)
+}
+
+/******************************************************************************/
+
+/**
+ * Provide dummy aliases for every other type for convenience &amp; backward
+ * compatibility.
+ */
+specs.types.forEach(type => {
+  if (!exports[type]) exports[type] = (conf, value) => value
+})
 </code></pre>
         </article>
     </section>

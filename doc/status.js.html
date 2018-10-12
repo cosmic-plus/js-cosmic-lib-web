@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>action.js - Documentation</title>
+    <title>status.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">action.js</h1>
+    <h1 class="page-title">status.js</h1>
     
 
     
@@ -41,182 +41,121 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 /**
- * Contains the action methods for CosmicLink.
+ * Contains the methods to update cosmic link status and HTML status node.
+ * Thoses methods won't have effect unless status reporting is enabled on `conf`
+ * object by using `status.init` (wich is done automatically on CosmicLink
+ * objects).
  *
  * @private
- * @exports action
+ * @exports status
  */
-const action = exports
+const status = exports
 
 const env = require('@cosmic-plus/jsutils/env')
-const helpers = require('@cosmic-plus/jsutils/misc')
-const StellarGuard = require('@stellarguard/sdk')
-
-const convert = require('./convert')
-const config = require('./config')
-const format = env.isBrowser &amp;&amp; require('./format')
-const resolve = require('./resolve')
-const signersUtils = require('./signers-utils')
-const status = require('./status')
+const html = env.isBrowser &amp;&amp; require('@cosmic-plus/jsutils/html')
 
 /**
- * Lock a CosmicLink to a network/source pair. The actual values for this pair
- * are defined by the transaction itself, or at parsing time for Transaction &amp;
- * XDR formats, or by this lock method, or by the global configuration.
- *
- * Locking is an asynchronous operation and resolves the transaction's federated
- * addresses if any. It also fetchs required accounts data to handle the
- * transaction signers properly. For this reason, it is mandatory before
- * signing and sending a transaction to the blockchain.
- *
- * @example
- * const cosmicLink = new CosmicLink({ memo: 'Demo', network: 'test' })
- * await cosmicLink.lock({ network: 'public' })
- * console.log(cosmicLink.network)   // => 'test'
- *
- * @alias CosmicLink#lock
- * @async
- * @param {Object} [options]
- * @param {string} options.network The fallback network in case transaction doesn't provides one.
- * @param {string} options.source The fallback address in case transaction doesn't provides one.
+ * Initialize `conf.status` &amp; `conf.errors`.
  */
-action.lock = async function (cosmicLink, options = {}) {
-  if (cosmicLink.status) throw new Error(cosmicLink.status)
-  if (cosmicLink.locker) throw new Error('CosmicLink is already locked.')
-
-  try {
-    await applyLock(cosmicLink, options)
-  } catch (error) {
-    if (!cosmicLink.errors) {
-      console.error(error)
-      status.error(cosmicLink, error.message)
-    }
-    status.fail(cosmicLink, 'Transaction build failed', 'throw')
-  }
-
-  updateSignersNode(cosmicLink)
-
-  return cosmicLink
-}
-
-async function applyLock (cosmicLink, options) {
-  /**
-   * The locker property tells that a CosmicLink have been locked, and exposes
-   * the network &amp; source values to which it have been locked.
-   *
-   * @alias CosmicLink#locker
-   */
-  cosmicLink.locker = {
-    source: cosmicLink.tdesc.source || options.source || config.source,
-    network: cosmicLink.tdesc.network || options.network || config.network
-  }
-
-  /// Preserve the underlying tdesc object.
-  cosmicLink._tdesc = Object.assign({}, cosmicLink.tdesc, cosmicLink.locker)
-  delete cosmicLink._query
-  delete cosmicLink._json
-
-  if (!cosmicLink._transaction) {
-    cosmicLink._transaction = await convert.tdescToTransaction(cosmicLink, cosmicLink.tdesc)
-    delete cosmicLink._tdesc
-  }
-
-  delete cosmicLink._transaction._cosmicplus
-  await signersUtils.extends(cosmicLink, cosmicLink._transaction)
+status.init = function (conf) {
+  conf.status = null
+  conf.errors = false
 }
 
 /**
- * Sign CosmicLink's Transaction with **keypairs_or_preimage** and update the
- * other formats accordingly. Only legit signers are allowed to sign, and a
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before signing.
+ * Set `conf` status as `status` and update statusNode. Error status should be
+ * recorded using the `status.fail` function bellow. Once a status is set it
+ * won't be mutated.
  *
- * @alias CosmicLink#sign
- * @param {...Keypair|Buffer|string} ...keypairs_or_preimage
+ * @param {string} status
  */
-action.sign = async function (cosmicLink, ...keypairsOrPreimage) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  resolve.useNetwork(cosmicLink)
+status.update = function (conf, status) {
+  if (conf.status || conf.status === undefined) return
 
-  const transaction = cosmicLink.transaction
-  let allFine = true
+  console.log('Set status: ' + status)
+  conf.status = status
 
-  if (typeof keypairsOrPreimage[0] !== 'string') {
-    for (let index in keypairsOrPreimage) {
-      const keypair = keypairsOrPreimage[index]
-      const publicKey = keypair.publicKey()
-
-      if (!cosmicLink.transaction.hasSigner(publicKey)) {
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Not a legit signer: ' + short)
-        allFine = false
-        continue
-      }
-
-      if (cosmicLink.transaction.hasSigned(publicKey)) continue
-
-      try {
-        transaction.sign(keypair)
-      } catch (error) {
-        console.error(error)
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Failed to sign with key: ' + short)
-        allFine = false
-        continue
-      }
-    }
-  } else {
-    try {
-      transaction.signHashX(keypairsOrPreimage[0])
-    } catch (error) {
-      console.error(error)
-      const short = helpers.shorter(keypairsOrPreimage[0])
-      status.error(cosmicLink, 'Failed to sign with preimage: ' + short, 'throw')
-    }
-  }
-
-  /// Update other formats.
-  ['_query', '_xdr', '_sep7'].forEach(format => delete cosmicLink[format])
-  updateSignersNode(cosmicLink)
-
-  if (!allFine) throw new Error('Some signers where invalid')
-  else return transaction
-}
-
-function updateSignersNode (cosmicLink) {
-  if (cosmicLink._signersNode) {
-    const signersNode = format.signatures(cosmicLink, cosmicLink._transaction)
-    cosmicLink.htmlDescription.replaceChild(signersNode, cosmicLink._signersNode)
-    cosmicLink._signersNode = signersNode
+  if (conf._statusNode) {
+    const title = html.grab('.cosmiclib_status', conf._statusNode)
+    title.textContent = status
   }
 }
 
 /**
- * Send CosmicLink's transaction to a blockchain validator, or to
- * [StellarGuard]{@link https://stellarguard.me} when relevant. A
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before sending.
+ * Set `conf` status as error status `status` and update statusNode. This
+ * implies that the cosmic link or the underlying transaction is invalid. Then,
+ * call `continuation` if any. `continuation` should be a either a function or
+ * 'throw'.
  *
- * Returns a promise that resolve/reject to the horizon server response.
- *
- * @example
- * cosmicLink.send()
- *   .then(console.log)
- *   .catch(console.error)
- *
- * @alias CosmicLink#send
- * @param {horizon} [horizon] An horizon node URL
- * @return {Object} The server response
+ * @param {string} status
+ * @param {function|'throw'} [continuation]
  */
-action.send = async function (cosmicLink, horizon = cosmicLink.horizon) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  const server = resolve.server(cosmicLink, horizon)
-  const account = await resolve.account(cosmicLink, cosmicLink.source)
+status.fail = function (conf, errorStatus, continuation) {
+  status.update(conf, errorStatus)
+  if (conf._statusNode) html.appendClass(conf._statusNode, 'cosmiclib_error')
+  errorContinuation(errorStatus, continuation)
+}
 
-  if (StellarGuard.hasStellarGuard(account)) {
-    if (cosmicLink.network === 'public') StellarGuard.usePublicNetwork()
-    else StellarGuard.useTestNetwork()
-    return StellarGuard.submitTransaction(cosmicLink.transaction)
-  } else {
-    return server.submitTransaction(cosmicLink.transaction)
+/**
+ * Append `error` to `conf.errors` and to the HTML display. Then, call
+ * `continuation` if any. `continuation` should be a either a function or
+ * 'throw'.
+ *
+ * @param {string} error
+ * @param {procedure|'throw'} [continuation]
+ */
+status.error = function (conf, error, continuation) {
+  console.log(error)
+
+  if (conf.errors !== undefined) {
+    if (!conf.errors) conf.errors = []
+
+    conf.errors.push(error)
+
+    if (conf._statusNode) {
+      const errorsNode = html.grab('.cosmiclib_errors', conf._statusNode)
+      const lineNode = html.create('li', null, error)
+      html.append(errorsNode, lineNode)
+    }
+  }
+
+  errorContinuation(error, continuation)
+}
+
+/**
+ * Create &amp; return an HTML element that displays `conf` status and eventual
+ * errors.
+ *
+ * @return {htmlElement}
+ */
+status.makeHtmlNode = function (conf) {
+  const statusNode = html.create('div', '.cosmiclib_statusNode')
+
+  const statusLine = html.create('span', '.cosmiclib_status')
+  html.append(statusNode, statusLine)
+  if (conf.status) statusLine.textContent = conf.status
+
+  const errorsNode = html.create('ul', '.cosmiclib_errors')
+  html.append(statusNode, errorsNode)
+  if (conf.errors) {
+    conf.errors.forEach(error => {
+      const errorLine = html.create('li', null, error)
+      html.append(errorsNode, errorLine)
+    })
+  }
+
+  return statusNode
+}
+
+/**
+ * If `continuation` is a function, call it with `error` as argument.
+ * If `continuation` equal 'throw', throw a new error with `error` as message.
+ * If `continuation` is undefined, do nothing.
+ */
+function errorContinuation (error, continuation) {
+  if (continuation) {
+    if (continuation === 'throw') throw new Error(error)
+    else continuation(error)
   }
 }
 </code></pre>

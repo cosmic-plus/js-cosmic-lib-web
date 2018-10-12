@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>action.js - Documentation</title>
+    <title>expand.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">action.js</h1>
+    <h1 class="page-title">expand.js</h1>
     
 
     
@@ -39,186 +39,143 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
+            <pre class="prettyprint source linenums"><code>'use_strict'
 /**
- * Contains the action methods for CosmicLink.
+ * Methods that expand tdesc paramaters from their query/StellarSdk format into
+ * their tdesc equivalent. This allows user to pass value in the format they
+ * feel the most confortable with when creating CosmicLinks.
  *
  * @private
- * @exports action
+ * @exports expand
  */
-const action = exports
+const expand = exports
 
-const env = require('@cosmic-plus/jsutils/env')
-const helpers = require('@cosmic-plus/jsutils/misc')
-const StellarGuard = require('@stellarguard/sdk')
+const StellarSdk = require('@cosmic-plus/base/stellar-sdk')
 
-const convert = require('./convert')
-const config = require('./config')
-const format = env.isBrowser &amp;&amp; require('./format')
-const resolve = require('./resolve')
-const signersUtils = require('./signers-utils')
-const status = require('./status')
+const decode = require('./decode')
+const destruct = require('./destruct')
+const normalize = require('./normalize')
+const specs = require('./specs')
 
 /**
- * Lock a CosmicLink to a network/source pair. The actual values for this pair
- * are defined by the transaction itself, or at parsing time for Transaction &amp;
- * XDR formats, or by this lock method, or by the global configuration.
+ * Replace each tdesc field value that is in query/StellarSdk format by its
+ * tdesc format counterpart. This function alter the `tdesc` passed in
+ * parameter.
  *
- * Locking is an asynchronous operation and resolves the transaction's federated
- * addresses if any. It also fetchs required accounts data to handle the
- * transaction signers properly. For this reason, it is mandatory before
- * signing and sending a transaction to the blockchain.
- *
- * @example
- * const cosmicLink = new CosmicLink({ memo: 'Demo', network: 'test' })
- * await cosmicLink.lock({ network: 'public' })
- * console.log(cosmicLink.network)   // => 'test'
- *
- * @alias CosmicLink#lock
- * @async
- * @param {Object} [options]
- * @param {string} options.network The fallback network in case transaction doesn't provides one.
- * @param {string} options.source The fallback address in case transaction doesn't provides one.
+ * @param {Object} tdesc
+ * @return tdesc
  */
-action.lock = async function (cosmicLink, options = {}) {
-  if (cosmicLink.status) throw new Error(cosmicLink.status)
-  if (cosmicLink.locker) throw new Error('CosmicLink is already locked.')
-
-  try {
-    await applyLock(cosmicLink, options)
-  } catch (error) {
-    if (!cosmicLink.errors) {
-      console.error(error)
-      status.error(cosmicLink, error.message)
-    }
-    status.fail(cosmicLink, 'Transaction build failed', 'throw')
+expand.tdesc = function (conf, tdesc) {
+  for (let field in tdesc) {
+    if (field === 'operations') continue
+    else tdesc[field] = expand.field(conf, field, tdesc[field])
   }
-
-  updateSignersNode(cosmicLink)
-
-  return cosmicLink
-}
-
-async function applyLock (cosmicLink, options) {
-  /**
-   * The locker property tells that a CosmicLink have been locked, and exposes
-   * the network &amp; source values to which it have been locked.
-   *
-   * @alias CosmicLink#locker
-   */
-  cosmicLink.locker = {
-    source: cosmicLink.tdesc.source || options.source || config.source,
-    network: cosmicLink.tdesc.network || options.network || config.network
-  }
-
-  /// Preserve the underlying tdesc object.
-  cosmicLink._tdesc = Object.assign({}, cosmicLink.tdesc, cosmicLink.locker)
-  delete cosmicLink._query
-  delete cosmicLink._json
-
-  if (!cosmicLink._transaction) {
-    cosmicLink._transaction = await convert.tdescToTransaction(cosmicLink, cosmicLink.tdesc)
-    delete cosmicLink._tdesc
-  }
-
-  delete cosmicLink._transaction._cosmicplus
-  await signersUtils.extends(cosmicLink, cosmicLink._transaction)
+  if (tdesc.operations) tdesc.operations.forEach(odesc => expand.odesc(conf, odesc))
+  normalize.tdesc(conf, tdesc)
+  return tdesc
 }
 
 /**
- * Sign CosmicLink's Transaction with **keypairs_or_preimage** and update the
- * other formats accordingly. Only legit signers are allowed to sign, and a
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before signing.
+ * Replace each odesc field value that is in query/StellarSdk format by its
+ * tdesc format counterpart. This function alter the `odesc` passed in
+ * parameter.
  *
- * @alias CosmicLink#sign
- * @param {...Keypair|Buffer|string} ...keypairs_or_preimage
+ * @param {Object} odesc
+ * @return tdesc
  */
-action.sign = async function (cosmicLink, ...keypairsOrPreimage) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  resolve.useNetwork(cosmicLink)
+expand.odesc = function (conf, odesc) {
+  for (let field in odesc) {
+    if (field === 'type') continue
+    else odesc[field] = expand.field(conf, field, odesc[field])
+  }
+  normalize.odesc(conf, odesc)
+  return odesc
+}
 
-  const transaction = cosmicLink.transaction
-  let allFine = true
+/******************************************************************************/
 
-  if (typeof keypairsOrPreimage[0] !== 'string') {
-    for (let index in keypairsOrPreimage) {
-      const keypair = keypairsOrPreimage[index]
-      const publicKey = keypair.publicKey()
+/**
+ * Expands `value` to its tdesc format according to `field` type.
+ *
+ * @param {string} field
+ * @param {string} value
+ */
+expand.field = function (conf, field, value) {
+  const type = specs.fieldType[field]
+  if (type) return expand.type(conf, type, value)
+  else throw new Error(`Invalid field: ${field}`)
+}
 
-      if (!cosmicLink.transaction.hasSigner(publicKey)) {
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Not a legit signer: ' + short)
-        allFine = false
-        continue
-      }
+/**
+ * Expands `value` to its tdesc format according to `type`.
+ *
+ * @param {string} type
+ * @param {string} value
+ */
+expand.type = function (conf, type, value) {
+  if (value === null || value === undefined) return value
+  if (typeof value === 'number') value = value + ''
+  return expand[type] ? expand[type](conf, value) : value + ''
+}
 
-      if (cosmicLink.transaction.hasSigned(publicKey)) continue
+/******************************************************************************/
 
-      try {
-        transaction.sign(keypair)
-      } catch (error) {
-        console.error(error)
-        const short = helpers.shorter(publicKey)
-        status.error(cosmicLink, 'Failed to sign with key: ' + short)
-        allFine = false
-        continue
-      }
-    }
+expand.asset = function (conf, asset) {
+  if (asset instanceof StellarSdk.Asset) return destruct.asset(conf, asset)
+  else if (typeof asset === 'string') return decode.asset(conf, asset)
+  else return asset
+}
+
+expand.assetPath = function (conf, assetPath) {
+  if (Array.isArray(assetPath)) return assetPath.map(asset => expand.asset(conf, asset))
+  else if (typeof assetPath === 'string') return decode.assetPath(conf, assetPath)
+}
+
+expand.date = function (conf, date) {
+  if (typeof date === 'number') date = date + ''
+  if (!date.match(/^[0-9]*$/) || date.length &lt; 5) return decode.date(conf, date)
+  else return destruct.date(conf, date)
+}
+
+expand.memo = function (conf, memo) {
+  if (memo instanceof StellarSdk.Memo) return destruct.memo(conf, memo)
+  else if (typeof memo === 'string') return decode.memo(conf, memo)
+  else return memo
+}
+
+expand.price = function (conf, price) {
+  if (typeof price === 'string' &amp;&amp; price.match(/:/)) {
+    return decode.price(conf, price)
   } else {
-    try {
-      transaction.signHashX(keypairsOrPreimage[0])
-    } catch (error) {
-      console.error(error)
-      const short = helpers.shorter(keypairsOrPreimage[0])
-      status.error(cosmicLink, 'Failed to sign with preimage: ' + short, 'throw')
-    }
-  }
-
-  /// Update other formats.
-  ['_query', '_xdr', '_sep7'].forEach(format => delete cosmicLink[format])
-  updateSignersNode(cosmicLink)
-
-  if (!allFine) throw new Error('Some signers where invalid')
-  else return transaction
-}
-
-function updateSignersNode (cosmicLink) {
-  if (cosmicLink._signersNode) {
-    const signersNode = format.signatures(cosmicLink, cosmicLink._transaction)
-    cosmicLink.htmlDescription.replaceChild(signersNode, cosmicLink._signersNode)
-    cosmicLink._signersNode = signersNode
+    return price
   }
 }
+
+expand.signer = function (conf, signer) {
+  if (signer.key) return destruct.signer(conf, signer)
+  else if (typeof signer === 'string') return decode.signer(conf, signer)
+  else return signer
+}
+
+expand.string = function (conf, string) {
+  if (typeof string === 'number') return string + ''
+  else return string
+}
+
+/******************************************************************************/
 
 /**
- * Send CosmicLink's transaction to a blockchain validator, or to
- * [StellarGuard]{@link https://stellarguard.me} when relevant. A
- * CosmicLink have to be [locked]{@link CosmicLink#lock} before sending.
- *
- * Returns a promise that resolve/reject to the horizon server response.
- *
- * @example
- * cosmicLink.send()
- *   .then(console.log)
- *   .catch(console.error)
- *
- * @alias CosmicLink#send
- * @param {horizon} [horizon] An horizon node URL
- * @return {Object} The server response
+ * Provide dummy aliases for every other type for convenience &amp; backward
+ * compatibility.
  */
-action.send = async function (cosmicLink, horizon = cosmicLink.horizon) {
-  if (!cosmicLink.locker) throw new Error('cosmicLink is not locked.')
-  const server = resolve.server(cosmicLink, horizon)
-  const account = await resolve.account(cosmicLink, cosmicLink.source)
-
-  if (StellarGuard.hasStellarGuard(account)) {
-    if (cosmicLink.network === 'public') StellarGuard.usePublicNetwork()
-    else StellarGuard.useTestNetwork()
-    return StellarGuard.submitTransaction(cosmicLink.transaction)
-  } else {
-    return server.submitTransaction(cosmicLink.transaction)
+specs.types.forEach(type => {
+  if (!exports[type]) {
+    exports[type] = (conf, value) => {
+      if (typeof value === 'number') return value + ''
+      else return value
+    }
   }
-}
+})
 </code></pre>
         </article>
     </section>

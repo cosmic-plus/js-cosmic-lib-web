@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>specs - Documentation</title>
+    <title>config - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">specs</h1>
+    <h1 class="page-title">config</h1>
     
 
     
@@ -51,7 +51,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Contains Stellar transactions specification.</p></div>
+            <div class="description"><p>Library-wide configuration.</p></div>
         
 
         
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line7">line 7</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -147,13 +147,20 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".fieldDesc"><span class="type-signature">(static) </span>fieldDesc<span class="type-signature"></span></h4>
+<h4 class="name" id=".aliases"><span class="type-signature">(static) </span>aliases<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Transaction field meaning.</p>
+    <p>Aliases handlers &amp; most known Stellar addresses. Aliases takes the form:</p>
+<pre class="prettyprint source lang-js"><code>{
+  'publicKey1': 'name1',
+  'publicKey2': 'name2',
+   ...
+  'publicKeyN': 'nameN'
+}</code></pre><p>Aliases are only used as a displaying sugar and can't be used as a
+replacement for federated address as it would lead to security issues.</p>
 </div>
 
 
@@ -189,7 +196,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line137">line 137</a>
+        <a href="aliases.js.html">aliases.js</a>, <a href="aliases.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -211,13 +218,25 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".fieldType"><span class="type-signature">(static) </span>fieldType<span class="type-signature"></span></h4>
+<h4 class="name" id=".clickHandlers"><span class="type-signature">(static) </span>clickHandlers<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Field types.</p>
+    <p>The active click handlers. Takes the form:</p>
+<pre class="prettyprint source"><code>cosmicLib.config.clickHandlers = {
+  type1: callback1,
+  ...
+  typeN: callbackN
+}</code></pre><p>Thoses click handlers are set by default:</p>
+<ul>
+<li><strong>address</strong>: A prompt that shows the address details</li>
+<li><strong>id</strong>: A function that copy the id into the clipboard</li>
+<li><strong>hash</strong>: A function that copy the hash into the clipboard or show a prompt
+for preimage signature when relevant
+<code>`</code></li>
+</ul>
 </div>
 
 
@@ -253,7 +272,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line84">line 84</a>
+        <a href="event.js.html">event.js</a>, <a href="event.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -275,14 +294,13 @@
         
             
 <div class="section-members">
-<h4 class="name" id=".neutralAccountId"><span class="type-signature">(static) </span>neutralAccountId<span class="type-signature"></span></h4>
+<h4 class="name" id=".network"><span class="type-signature">(static) </span>network<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>A neutral account ID meant to be replaced before signing &amp; sending the
-transaction.</p>
+    <p>The default fallback network.</p>
 </div>
 
 
@@ -314,11 +332,16 @@ transaction.</p>
     
 
     
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>'public'</li>
+        </ul></dd>
+    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line162">line 162</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -340,13 +363,13 @@ transaction.</p>
         
             
 <div class="section-members">
-<h4 class="name" id=".operationFields"><span class="type-signature">(static) </span>operationFields<span class="type-signature"></span></h4>
+<h4 class="name" id=".page"><span class="type-signature">(static) </span>page<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Operations fields</p>
+    <p>The base URI to build cosmic links.</p>
 </div>
 
 
@@ -378,11 +401,16 @@ transaction.</p>
     
 
     
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>'https://cosmic.link/'</li>
+        </ul></dd>
+    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line66">line 66</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -404,13 +432,13 @@ transaction.</p>
         
             
 <div class="section-members">
-<h4 class="name" id=".operationMandatoryFields"><span class="type-signature">(static) </span>operationMandatoryFields<span class="type-signature"></span></h4>
+<h4 class="name" id=".source"><span class="type-signature">(static) </span>source<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Operation mandatory fields.</p>
+    <p>The default fallback source address.</p>
 </div>
 
 
@@ -442,331 +470,16 @@ transaction.</p>
     
 
     
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".operationOptionalFields"><span class="type-signature">(static) </span>operationOptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Operation optionnal fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>undefined</li>
+        </ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".sep7MandatoryFields"><span class="type-signature">(static) </span>sep7MandatoryFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>The mandatory fields for each SEP-0007 operation.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line167">line 167</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".sep7OptionalFields"><span class="type-signature">(static) </span>sep7OptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>The optional fields for each SEP-0007 operation.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line175">line 175</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".transactionOptionalFields"><span class="type-signature">(static) </span>transactionOptionalFields<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Transaction optional fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line12">line 12</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".types"><span class="type-signature">(static) </span>types<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>An array of each valid type for fields.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line151">line 151</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -797,11 +510,15 @@ transaction.</p>
 
     
 
-    <h4 class="name" id=".isOperationField"><span class="type-signature">(static) </span>isOperationField<span class="signature">(type, field)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".addAliases"><span class="type-signature">(static) </span>addAliases<span class="signature">(aliases)</span><span class="type-signature"></span></h4>
 
     
 
 
+
+<div class="description">
+    <p>Add new <strong>aliases</strong> or replace existing ones.</p>
+</div>
 
 
 
@@ -836,7 +553,152 @@ transaction.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line77">line 77</a>
+        <a href="aliases.js.html">aliases.js</a>, <a href="aliases.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>aliases</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>An object such as <code>{ publicKey1: name1, ..., publicKeyN: nameN }</code></p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>cosmicLib.config.addAliases({
+  'GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP': 'smartlands.io',
+  'GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5': 'stellarport.io'
+})</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".clearClickHandler"><span class="type-signature">(static) </span>clearClickHandler<span class="signature">(type)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove the current click handler for <strong>type</strong>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.js.html">event.js</a>, <a href="event.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -897,33 +759,8 @@ transaction.</p>
             
 
             <td class="description last">
-                <p>Operation type</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>field</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
+                <p>Type of a transaction/operation field such as
+    <code>address</code>, <code>asset</code>, <code>hash</code>, ...</p>
                 
             </td>
         </tr>
@@ -945,28 +782,14 @@ transaction.</p>
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>boolean</code></span>
 
 
-    </dd>
-</dl>
+<div class="section-examples">
+<h5>Example</h5>
 
+    <pre class="prettyprint"><code>cosmicLib.config.clearClickHandler('address')</code></pre>
 
-    
 </div>
-
-
 
 </div>
         
@@ -975,11 +798,15 @@ transaction.</p>
 
     
 
-    <h4 class="name" id=".isTransactionField"><span class="type-signature">(static) </span>isTransactionField<span class="signature">(field)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".removeAliases"><span class="type-signature">(static) </span>removeAliases<span class="signature">(publicKeys)</span><span class="type-signature"></span></h4>
 
     
 
 
+
+<div class="description">
+    <p>Remove <strong>publicKeys</strong> from aliases list.</p>
+</div>
 
 
 
@@ -1014,7 +841,7 @@ transaction.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="specs.js.html">specs.js</a>, <a href="specs.js.html#line21">line 21</a>
+        <a href="aliases.js.html">aliases.js</a>, <a href="aliases.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -1058,13 +885,13 @@ transaction.</p>
 
         <tr>
             
-                <td class="name"><code>field</code></td>
+                <td class="name"><code>publicKeys</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>Array</code></span>
 
 
             
@@ -1075,7 +902,7 @@ transaction.</p>
             
 
             <td class="description last">
-                
+                <p>An array of public keys</p>
                 
             </td>
         </tr>
@@ -1097,28 +924,413 @@ transaction.</p>
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
 
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>cosmicLib.config.removeAliases([
+ 'GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP',
+ 'GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5',
+])</code></pre>
+
+</div>
+
+</div>
         
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>boolean</code></span>
-
-
-    </dd>
-</dl>
-
+            
+<div class="section-method">
 
     
+
+    <h4 class="name" id=".setClickHandler"><span class="type-signature">(static) </span>setClickHandler<span class="signature">(type, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Set the click handler for <strong>type</strong> HTML elements as <strong>callback</strong>.</p>
 </div>
 
 
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.js.html">event.js</a>, <a href="event.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Type of a transaction/operation field such as
+    <code>address</code>, <code>asset</code>, <code>hash</code>, ...</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>A function that accept one <code>event</code> argument</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>cosmicLib.config.setClickHandler('address', showAddressPopup)</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".setupNetwork"><span class="type-signature">(static) </span>setupNetwork<span class="signature">(name, horizon, passphrase<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Set default <strong>passphrase</strong> and <strong>horizon</strong> URL for network <strong>name</strong>.</p>
+<p>Adding custom network this way will enable the use of their name in cosmic
+queries (as in <code>&amp;network=name</code>). However, please remind that this feature
+will works only on your side and could break compatibility with other
+services.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Network name (like 'public', 'test')</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>horizon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Horizon URL</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passphrase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Network passphrase</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>cosmicLib.config.setupNetwork('public', 'https://my-own-horizon-instance.example.org')
+cosmicLib.config.setupNetwork('custom', 'https://custom-horizon.example.org', 'My Custom Passphrase')</code></pre>
+
+</div>
 
 </div>
         
