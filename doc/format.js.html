@@ -81,12 +81,8 @@ format.tdesc = function (conf, tdesc) {
   })
   if (infoNode) html.append(trNode, infoNode)
 
-  /// Sort operations so that the ones with declared sources are at the end.
-  /// (makes data presentation better)
-  let operations = tdesc.operations.sort(entry => entry.source ? 1 : 0)
-
   try {
-    for (let index in operations) {
+    for (let index in tdesc.operations) {
       const operation = tdesc.operations[index]
       const opNode = format.odesc(conf, operation)
       html.append(trNode, opNode)
@@ -106,13 +102,14 @@ format.tdesc = function (conf, tdesc) {
  */
 format.odesc = function (conf, odesc) {
   const opNode = html.create('div', '.cosmiclib_operation')
+  let retNode = opNode
 
   if (odesc.source) {
-    html.appendClass(opNode, 'cosmiclib_sourcedOperation')
+    retNode = html.create('div', '.cosmiclib_sourcedOperation')
     const sourceNode = html.create('div', '.cosmiclib_sideInfo', 'Source: ')
     const addressNode = format.address(conf, odesc.source)
     html.append(sourceNode, addressNode)
-    html.append(opNode, sourceNode)
+    html.append(retNode, sourceNode, opNode)
   }
 
   let meaning = operationMeaning(odesc)
@@ -133,7 +130,7 @@ format.odesc = function (conf, odesc) {
       html.append(opNode, txt)
     }
   }
-  return opNode
+  return retNode
 }
 
 /**
