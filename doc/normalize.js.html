@@ -39,7 +39,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use_strict'
+            <pre class="prettyprint source linenums"><code>"use_strict"
 /**
  * Methods to set tdesc/odesc defaults values and strip out useless data.
  *
@@ -48,9 +48,10 @@
  */
 const normalize = exports
 
-const StellarSdk = require('@cosmic-plus/base/stellar-sdk')
+const StellarSdk = require("@cosmic-plus/base/stellar-sdk")
 
-const resolve = require('./resolve')
+const config = require("./config")
+const resolve = require("./resolve")
 
 /**
  * Setup the default values for `tdesc`.
@@ -63,33 +64,42 @@ normalize.tdesc = function (conf, tdesc) {
   dateFields.forEach(field => {
     if (tdesc[field]) {
       tdesc[field] = normalize.date(conf, tdesc[field])
-      if (tdesc[field] === '1970') delete tdesc[field]
+      if (tdesc[field] === "1970") delete tdesc[field]
     }
   })
 
-  if (tdesc.network) {
-    if (tdesc.network === StellarSdk.Networks.TESTNET) tdesc.network = 'test'
-    else if (tdesc.network === StellarSdk.Networks.PUBLIC) tdesc.network = 'public'
-  }
+  if (tdesc.network) tdesc.network = normalize.network(conf, tdesc.network)
 
-  if (tdesc.horizon) {
-    if (!tdesc.network || tdesc.network === 'public' || tdesc.network === 'test') {
-      delete tdesc.horizon
-    } else if (tdesc.horizon.substr(0, 8) === 'https://') {
-      tdesc.horizon = tdesc.horizon.substr(8)
-    }
+  // When network is neither test nor public, we want to provide a fallback
+  // Horizon URL; else we don't need it.
+  if (tdesc.network &amp;&amp; tdesc.network !== "public" &amp;&amp; tdesc.network !== "test") {
+    const url = resolve.horizon(config, tdesc.network) || tdesc.horizon
+    tdesc.horizon = normalize.url(conf, url)
+  } else {
+    delete tdesc.horizon
   }
 }
 
-const dateFields = ['minTime', 'maxTime']
+const dateFields = ["minTime", "maxTime"]
 
 normalize.date = function (conf, date) {
-  return date.replace(/:00\.000/, '').replace(/\.000/, '')
-    .replace(/T00:00Z/, '').replace(/-01$/, '').replace(/-01$/, '')
+  return date.replace(/:00\.000/, "").replace(/\.000/, "")
+    .replace(/T00:00Z/, "").replace(/-01$/, "").replace(/-01$/, "")
 }
 
 normalize.network = function (conf, network) {
-  return resolve.networkName(conf, network) || network
+  const networkName = resolve.networkName(conf, network)
+  if (networkName === "public" || networkName === "test") {
+    return networkName
+  // In network is neither test nor public, we want to use the network
+  // passphrase as parameter to ensure cross-wallet compatibility.
+  } else {
+    return resolve.networkPassphrase(conf, network)
+  }
+}
+
+normalize.url = function (conf, url) {
+  if (url) return (url.substr(0,4) === "http") ? url : "https://" + url
 }
 
 /**
@@ -99,39 +109,39 @@ normalize.network = function (conf, network) {
 normalize.odesc = function (conf, odesc) {
   removeEmptyFields(odesc)
   /// No limit = maximum limit.
-  if (odesc.limit === '922337203685.4775807') delete odesc.limit
+  if (odesc.limit === "922337203685.4775807") delete odesc.limit
   /// New offer.
-  if (odesc.offerId === '0') delete odesc.offerId
+  if (odesc.offerId === "0") delete odesc.offerId
   /// Empty asset conversion path.
   if (odesc.path &amp;&amp; !odesc.path.length) delete odesc.path
   /// Useless denominator.
-  if (odesc.price &amp;&amp; odesc.price.d === 1) odesc.price = odesc.price.n + ''
+  if (odesc.price &amp;&amp; odesc.price.d === 1) odesc.price = odesc.price.n + ""
 
   switch (odesc.type) {
-    case 'allowTrust':
-      /// Allow trust by default.
-      if (odesc.authorize === undefined) odesc.authorize = true
-      break
-    case 'createPassiveOffer':
-    case 'manageOffer': {
-      /// XLM as default asset.
-      if (odesc.buying &amp;&amp; !odesc.selling) odesc.selling = XLM
-      if (odesc.selling &amp;&amp; !odesc.buying) odesc.buying = XLM
-      break
-    }
-    case 'manageData':
-      /// Delete data entry.
-      if (!odesc.value) odesc.value = ''
-      break
-    case 'pathPayment':
-      /// XLM as default asset.
-      if (odesc.destAsset &amp;&amp; !odesc.sendAsset) odesc.sendAsset = XLM
-      if (odesc.sendAsset &amp;&amp; !odesc.destAsset) odesc.destAsset = XLM
-      break
-    case 'payment':
-      /// XLM as default asset.
-      if (!odesc.asset) odesc.asset = XLM
-      break
+  case "allowTrust":
+    /// Allow trust by default.
+    if (odesc.authorize === undefined) odesc.authorize = true
+    break
+  case "createPassiveOffer":
+  case "manageOffer": {
+    /// XLM as default asset.
+    if (odesc.buying &amp;&amp; !odesc.selling) odesc.selling = XLM
+    if (odesc.selling &amp;&amp; !odesc.buying) odesc.buying = XLM
+    break
+  }
+  case "manageData":
+    /// Delete data entry.
+    if (!odesc.value) odesc.value = ""
+    break
+  case "pathPayment":
+    /// XLM as default asset.
+    if (odesc.destAsset &amp;&amp; !odesc.sendAsset) odesc.sendAsset = XLM
+    if (odesc.sendAsset &amp;&amp; !odesc.destAsset) odesc.destAsset = XLM
+    break
+  case "payment":
+    /// XLM as default asset.
+    if (!odesc.asset) odesc.asset = XLM
+    break
   }
 }
 
