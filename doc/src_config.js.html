@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/config.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,100 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/config.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use_strict"
+/**
+ * Library-wide configuration.
+ *
+ * @borrows module:aliases.all as aliases
+ * @borrows module:aliases.add as addAliases
+ * @borrows module:aliases.remove as removeAliases
+ *
+ * @borrows module:event.defaultClickHandlers as clickHandlers
+ * @borrows module:event.setClickHandler as setClickHandler
+ * @borrows module:event.clearClickHandler as clearClickHandler
+ *
+ * @exports config
+ */
+const config = exports
+
+const env = require("@cosmic-plus/jsutils/env")
+const StellarSdk = require("@cosmic-plus/base/stellar-sdk")
+
+const aliases = require("./aliases")
+const event = env.isBrowser &amp;&amp; require("./event")
+
+/**
+ * The base URI to build cosmic links.
+ * @default 'https://cosmic.link/'
+ */
+config.page = "https://cosmic.link/"
+/**
+ * The default fallback network.
+ * @default 'public'
+ */
+config.network = "public"
+/**
+ * The default fallback source address.
+ * @default undefined
+ */
+config.source = undefined
+
+/**
+ * Networks setup.
+ *
+ * @private
+ */
+config.current = {
+  passphrase: {},
+  horizon: {},
+  server: {}
+}
+
+/**
+ * Set default **passphrase** and **horizon** URL for network **name**.
+ *
+ * Adding custom network this way will enable the use of their name in cosmic
+ * queries (as in `&amp;network=name`). However, please remind that this feature
+ * will works only on your side and could break compatibility with other
+ * services.
+ *
+ * @example
+ * cosmicLib.config.setupNetwork('public', 'https://my-own-horizon-instance.example.org')
+ * cosmicLib.config.setupNetwork('custom', 'https://custom-horizon.example.org', 'My Custom Passphrase')
+ *
+ * @param {string} name Network name (like 'public', 'test')
+ * @param {string} horizon Horizon URL
+ * @param {string} [passphrase] Network passphrase
+ */
+config.setupNetwork = function (name, horizon, passphrase) {
+  if (passphrase) config.current.passphrase[name] = passphrase
+  else passphrase = config.current.passphrase[name]
+  config.current.horizon[passphrase] = horizon
+}
+
+config.setupNetwork("public", "https://horizon.stellar.org", StellarSdk.Networks.PUBLIC)
+config.setupNetwork("test", "https://horizon-testnet.stellar.org", StellarSdk.Networks.TESTNET)
+
+config.aliases = aliases.all
+config.addAliases = (definitions) => aliases.add(config, definitions)
+config.removeAliases = (array) => aliases.remove(config, array)
+
+config.clickHandlers = event.defaultClickHandlers
+config.setClickHandler = (fieldType, callback) => event.setClickHandler(config, fieldType, callback)
+config.clearClickHandler = (fieldType) => event.clearClickHandler(config, fieldType)
+</code></pre>
+        </article>
+    </section>
 
 
 

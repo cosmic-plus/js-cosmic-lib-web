@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/destruct.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,192 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/destruct.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict"
+/**
+ * Contains the methods to convert data from *{@see Transaction}* format to
+ * *Tdesc* format.
+ *
+ * @private
+ * @exports destruct
+ */
+const destruct = exports
+
+const { isUtf8 } = require("@cosmic-plus/jsutils/misc")
+
+const normalize = require("./normalize")
+const specs = require("./specs")
+
+/**
+ * Convert `tx` into *Tdesc*.
+ *
+ * @param {Transaction} tx
+ * @param {Object} options
+ * @return {Object} A tdesc
+ */
+destruct.transaction = function (conf, tx, options = {}) {
+  const tdesc = {}
+
+  if (tx.source === specs.neutralAccountId) options.stripSource = true
+  if (tx.sequence === "0") options.stripSequence = true
+
+  tdesc.network = options.network
+  tdesc.horizon = options.horizon
+  tdesc.callback = options.callback
+  if (!options.stripSource) tdesc.source = tx.source
+  if (!options.stripSource &amp;&amp; !options.stripSequence) {
+    tdesc.sequence = destruct.sequence(conf, tx.sequence)
+  }
+
+  if (tx._memo._switch.name !== "memoNone") tdesc.memo = destruct.memo(conf, tx._memo)
+  if (tx.timeBounds) {
+    if (tx.timeBounds.minTime) tdesc.minTime = destruct.date(conf, tx.timeBounds.minTime)
+    if (tx.timeBounds.maxTime) tdesc.maxTime = destruct.date(conf, tx.timeBounds.maxTime)
+  }
+  tdesc.fee = tx.fee
+
+  /// Work around a bug in stellar-sdk 0.11
+  /// https://github.com/stellar/js-stellar-sdk/issues/204
+  tdesc.operations = []
+  for (let index in tx.operations) {
+    const op = tx.operations[index]
+    if (op.homeDomain === null) {
+      const optree = tx.tx._attributes.operations[index]
+      op.homeDomain = optree._attributes.body._value._attributes.homeDomain
+    }
+    tdesc.operations[index] = destruct.operation(conf, op)
+  }
+  // tdesc.operations = tx.operations.map(op => destruct.operation(conf, op))
+
+  normalize.tdesc(conf, tdesc)
+  return tdesc
+}
+
+/**
+ * Convert `op` into odesc format.
+ *
+ * @param {Object} op A StellarSdk Operation
+ * @return {Object} An odesc
+ */
+destruct.operation = function (conf, op) {
+  const odesc = {}
+
+  for (let field in op) {
+    if (field === "type") odesc.type = op.type
+    else if (field === "line") odesc.asset = op.line
+    else odesc[field] = destruct.field(conf, field, op[field])
+  }
+
+  normalize.odesc(conf, odesc)
+  return odesc
+}
+
+/******************************************************************************/
+
+/**
+ * Destruct `value` according to `field` type.
+ *
+ * @param {string} field
+ * @param {any} value
+ */
+destruct.field = function (conf, field, value) {
+  const type = specs.fieldType[field]
+  if (type) return destruct.type(conf, type, value)
+  else throw new Error(`Invalid field: ${field}`)
+}
+
+/**
+ * Destruct `value` using the destructuring function for `type`.
+ *
+ * @param {string} type
+ * @param {any} value
+ */
+destruct.type = function (conf, type, value) {
+  if (value === null || value === undefined) return value
+  else return destruct[type](conf, value)
+}
+
+/******************************************************************************/
+
+destruct.asset = function (conf, asset) {
+  return Object.assign({}, asset)
+}
+
+destruct.assetPath = function (conf, assetPath) {
+  return assetPath.map(asset => destruct.asset(asset))
+}
+
+destruct.buffer = function (conf, buffer) {
+  if (!buffer) return null
+  const string = buffer.toString()
+  if (isUtf8(string)) {
+    return { type: "text", value: string }
+  } else {
+    const value = buffer.toString("base64").replace(/=*$/,"")
+    return { type: "base64", value: value }
+  }
+}
+
+destruct.date = function (conf, timestamp) {
+  return new Date(timestamp * 1000).toISOString()
+}
+
+destruct.memo = function (conf, sdkMemo) {
+  const memo = {}
+  if (sdkMemo._switch.name !== "memoNone") {
+    memo.type = sdkMemo._arm
+    if (memo.type === "hash" || memo.type === "retHash") {
+      memo.value = sdkMemo._value.toString("hex")
+      if (memo.type === "retHash") memo.type = "return"
+    } else if (memo.type === "text") {
+      return destruct.buffer(conf, sdkMemo._value)
+    } else {
+      memo.value = sdkMemo._value.toString()
+    }
+  }
+  return memo
+}
+
+destruct.sequence = function (conf, sdkSequence) {
+  return sdkSequence.toString()
+}
+
+destruct.signer = function (conf, sdkSigner) {
+  const signer = { weight: sdkSigner.weight }
+  if (sdkSigner.ed25519PublicKey) {
+    signer.type = "key"
+    signer.value = sdkSigner.ed25519PublicKey
+  } else if (sdkSigner.sha256Hash) {
+    signer.type = "hash"
+    signer.value = sdkSigner.sha256Hash.toString("hex")
+  } else if (sdkSigner.preAuthTx) {
+    signer.type = "tx"
+    signer.value = sdkSigner.preAuthTx.toString("hex")
+  }
+  return signer
+}
+
+/******************************************************************************/
+
+/**
+ * Provide dummy aliases for every other type for convenience &amp; backward
+ * compatibility.
+ */
+specs.types.forEach(type => {
+  if (!exports[type]) exports[type] = (conf, value) => value
+})
+</code></pre>
+        </article>
+    </section>
 
 
 

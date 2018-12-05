@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/status.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,140 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/status.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict"
+/**
+ * Contains the methods to update cosmic link status and HTML status node.
+ * Thoses methods won't have effect unless status reporting is enabled on `conf`
+ * object by using `status.init` (wich is done automatically on CosmicLink
+ * objects).
+ *
+ * @private
+ * @exports status
+ */
+const status = exports
+
+const env = require("@cosmic-plus/jsutils/env")
+const html = env.isBrowser &amp;&amp; require("@cosmic-plus/jsutils/html")
+
+/**
+ * Initialize `conf.status` &amp; `conf.errors`.
+ */
+status.init = function (conf) {
+  conf.status = null
+  conf.errors = false
+}
+
+/**
+ * Set `conf` status as `status` and update statusNode. Error status should be
+ * recorded using the `status.fail` function bellow. Once a status is set it
+ * won't be mutated.
+ *
+ * @param {string} status
+ */
+status.update = function (conf, status) {
+  if (conf.status || conf.status === undefined) return
+
+  // eslint-disable-next-line no-console
+  console.log("Set status: " + status)
+  conf.status = status
+
+  if (conf._statusNode) {
+    const title = html.grab(".cosmiclib_status", conf._statusNode)
+    title.textContent = status
+  }
+}
+
+/**
+ * Set `conf` status as error status `status` and update statusNode. This
+ * implies that the cosmic link or the underlying transaction is invalid. Then,
+ * call `continuation` if any. `continuation` should be a either a function or
+ * 'throw'.
+ *
+ * @param {string} status
+ * @param {function|'throw'} [continuation]
+ */
+status.fail = function (conf, errorStatus, continuation) {
+  status.update(conf, errorStatus)
+  if (conf._statusNode) html.appendClass(conf._statusNode, "cosmiclib_error")
+  errorContinuation(errorStatus, continuation)
+}
+
+/**
+ * Append `error` to `conf.errors` and to the HTML display. Then, call
+ * `continuation` if any. `continuation` should be a either a function or
+ * 'throw'.
+ *
+ * @param {string} error
+ * @param {procedure|'throw'} [continuation]
+ */
+status.error = function (conf, error, continuation) {
+  // eslint-disable-next-line no-console
+  console.log(error)
+
+  if (conf.errors !== undefined) {
+    if (!conf.errors) conf.errors = []
+
+    conf.errors.push(error)
+
+    if (conf._statusNode) {
+      const errorsNode = html.grab(".cosmiclib_errors", conf._statusNode)
+      const lineNode = html.create("li", null, error)
+      html.append(errorsNode, lineNode)
+    }
+  }
+
+  errorContinuation(error, continuation)
+}
+
+/**
+ * Create &amp; return an HTML element that displays `conf` status and eventual
+ * errors.
+ *
+ * @return {htmlElement}
+ */
+status.makeHtmlNode = function (conf) {
+  const statusNode = html.create("div", ".cosmiclib_statusNode")
+
+  const statusLine = html.create("span", ".cosmiclib_status")
+  html.append(statusNode, statusLine)
+  if (conf.status) statusLine.textContent = conf.status
+
+  const errorsNode = html.create("ul", ".cosmiclib_errors")
+  html.append(statusNode, errorsNode)
+  if (conf.errors) {
+    conf.errors.forEach(error => {
+      const errorLine = html.create("li", null, error)
+      html.append(errorsNode, errorLine)
+    })
+  }
+
+  return statusNode
+}
+
+/**
+ * If `continuation` is a function, call it with `error` as argument.
+ * If `continuation` equal 'throw', throw a new error with `error` as message.
+ * If `continuation` is undefined, do nothing.
+ */
+function errorContinuation (error, continuation) {
+  if (continuation) {
+    if (continuation === "throw") throw new Error(error)
+    else continuation(error)
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

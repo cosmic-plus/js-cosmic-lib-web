@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/index.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,103 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict"
+
+const env = require("@cosmic-plus/jsutils/env")
+const helpers = require("@cosmic-plus/jsutils/misc")
+
+if (env.isBrowser) require("@cosmic-plus/jsutils/polyfill")
+
+/**
+ * Automatically pass `config` to `module` functions as first argument.
+ *
+ * @param {Object} module A cosmic-lib module whose functions takes config as
+ *   the first argument.
+ * @param {Object} config A configuration object similar than config.js module.
+ * @private
+ */
+function exposeModule (module, config = {}) {
+  const layer = Object.assign({}, module)
+  helpers.setHiddenProperty(layer, "_config", config)
+  for (let name in module) {
+    if (typeof module[name] === "function") {
+      layer[name] = function (...params) { return module[name](this._config, ...params) }
+    } else {
+      layer[name] = module[name]
+    }
+  }
+  return layer
+}
+
+/**
+ * Create a clone of the library with an alternative config object derived from
+ * **params**. Fields which are not defined in **params** stay in sync with parent
+ * configuration.
+ *
+ * @example
+ * const testnet = cosmicLib.withConfig({ network: 'test' })
+ * const account = await testnet.resolve.account('tips*cosmic.link')
+ *
+ * @params {Object} params Alternative configuration
+ * @return {Object} A clone of cosmicLib
+ */
+exports.withConfig = function (params) {
+  const library = Object.create(this)
+  library.config = Object.assign({}, this.config, params)
+
+  for (let module in this) {
+    if (this[module].prototype &amp;&amp; this[module].prototype.__proto__ === this.config) {
+      library[module] = class extends this[module] {}
+      Object.assign(library[module].prototype, this[module].prototype)
+      library[module].prototype.__proto__ = library.config
+    } else if (this[module]._config) {
+      library[module] = Object.create(this[module])
+      helpers.setHiddenProperty(library[module], "_config", library.config)
+    }
+  }
+
+  return library
+}
+
+/**
+ * Export modules **names** after linking them to `config`.
+ *
+ * @param  {...String} names Module names
+ */
+function exportModule (name, module) {
+  exports[name] = exposeModule(module, config)
+}
+
+// Export modules.
+
+const config = exports.config = require("./config")
+exportModule("check", require("./check"))
+exports.CosmicLink = require("./cosmiclink")
+if (env.isBrowser) exportModule("load", require("./load"))
+exportModule("resolve", require("./resolve"))
+exportModule("signersUtils", require("./signers-utils"))
+exports.specs = require("./specs")
+
+// Export helpers (not documented in the manual - please check the code).
+exportModule("check", require("./check"))
+exportModule("expand", require("./expand"))
+exportModule("construct", require("./construct"))
+exportModule("destruct", require("./destruct"))
+exportModule("encode", require("./encode"))
+exportModule("decode", require("./decode"))
+</code></pre>
+        </article>
+    </section>
 
 
 

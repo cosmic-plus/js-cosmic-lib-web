@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/normalize.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,134 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/normalize.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use_strict"
+/**
+ * Methods to set tdesc/odesc defaults values and strip out useless data.
+ *
+ * @exports normalize
+ * @private
+ */
+const normalize = exports
+
+const StellarSdk = require("@cosmic-plus/base/stellar-sdk")
+
+const config = require("./config")
+const resolve = require("./resolve")
+
+/**
+ * Setup the default values for `tdesc`.
+ */
+normalize.tdesc = function (conf, tdesc) {
+  removeEmptyFields(tdesc)
+  if (!tdesc.operations) tdesc.operations = []
+
+  if (tdesc.fee === 100 * tdesc.operations.length) delete tdesc.fee
+  dateFields.forEach(field => {
+    if (tdesc[field]) {
+      tdesc[field] = normalize.date(conf, tdesc[field])
+      if (tdesc[field] === "1970") delete tdesc[field]
+    }
+  })
+
+  if (tdesc.network) tdesc.network = normalize.network(conf, tdesc.network)
+
+  // When network is neither test nor public, we want to provide a fallback
+  // Horizon URL; else we don't need it.
+  if (tdesc.network &amp;&amp; tdesc.network !== "public" &amp;&amp; tdesc.network !== "test") {
+    const url = resolve.horizon(config, tdesc.network) || tdesc.horizon
+    tdesc.horizon = normalize.url(conf, url)
+  } else {
+    delete tdesc.horizon
+  }
+
+  if (tdesc.callback) tdesc.callback = normalize.url(conf, tdesc.callback)
+}
+
+const dateFields = ["minTime", "maxTime"]
+
+normalize.date = function (conf, date) {
+  return date.replace(/:00\.000/, "").replace(/\.000/, "")
+    .replace(/T00:00Z/, "").replace(/-01$/, "").replace(/-01$/, "")
+}
+
+normalize.network = function (conf, network) {
+  const networkName = resolve.networkName(conf, network)
+  if (networkName === "public" || networkName === "test") {
+    return networkName
+  // In network is neither test nor public, we want to use the network
+  // passphrase as parameter to ensure cross-wallet compatibility.
+  } else {
+    return resolve.networkPassphrase(conf, network)
+  }
+}
+
+normalize.url = function (conf, url) {
+  if (url) return (url.substr(0,4) === "http") ? url : "https://" + url
+}
+
+/**
+ * Add the implicit values for fields made optional in the CosmicLink protocol
+ * but required by StellarSdk.
+ */
+normalize.odesc = function (conf, odesc) {
+  removeEmptyFields(odesc)
+  /// No limit = maximum limit.
+  if (odesc.limit === "922337203685.4775807") delete odesc.limit
+  /// New offer.
+  if (odesc.offerId === "0") delete odesc.offerId
+  /// Empty asset conversion path.
+  if (odesc.path &amp;&amp; !odesc.path.length) delete odesc.path
+  /// Useless denominator.
+  if (odesc.price &amp;&amp; odesc.price.d === 1) odesc.price = odesc.price.n + ""
+
+  switch (odesc.type) {
+  case "allowTrust":
+    /// Allow trust by default.
+    if (odesc.authorize === undefined) odesc.authorize = true
+    break
+  case "createPassiveOffer":
+  case "manageOffer": {
+    /// XLM as default asset.
+    if (odesc.buying &amp;&amp; !odesc.selling) odesc.selling = XLM
+    if (odesc.selling &amp;&amp; !odesc.buying) odesc.buying = XLM
+    break
+  }
+  case "manageData":
+    /// Delete data entry.
+    if (!odesc.value) odesc.value = ""
+    break
+  case "pathPayment":
+    /// XLM as default asset.
+    if (odesc.destAsset &amp;&amp; !odesc.sendAsset) odesc.sendAsset = XLM
+    if (odesc.sendAsset &amp;&amp; !odesc.destAsset) odesc.destAsset = XLM
+    break
+  case "payment":
+    /// XLM as default asset.
+    if (!odesc.asset) odesc.asset = XLM
+    break
+  }
+}
+
+const XLM = StellarSdk.Asset.native()
+
+function removeEmptyFields (object) {
+  for (let field in object) {
+    if (object[field] === null || object[field] === undefined) delete object[field]
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

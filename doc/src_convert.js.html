@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/convert.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,98 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
+    <h1 class="page-title">src/convert.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
     
-    </tbody>
-</table>
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict"
+/**
+ * Contains the methods to convert transactions between various formats.
+ *
+ * @private
+ * @exports convert
+ */
+const convert = exports
 
+const StellarSdk = require("@cosmic-plus/base/stellar-sdk")
 
+const construct = require("./construct")
+const decode = require("./decode")
+const destruct = require("./destruct")
+const encode = require("./encode")
+const resolve = require("./resolve")
 
+/** ****************************    URI -> XDR    ******************************/
 
+convert.uriToQuery = function (conf, uri) {
+  if (!uri.match(/\?/)) return null
+  const query = uri.replace(/^[^?]*/, "")
+  return query
+}
 
+convert.queryToTdesc = decode.query
 
+convert.tdescToJson = function (conf, tdesc) {
+  return JSON.stringify(tdesc, null, 2)
+}
 
+convert.tdescToTransaction = construct.transaction
 
+convert.transactionToXdr = function (conf, transaction) {
+  return transaction.toEnvelope().toXDR("base64")
+}
 
+convert.xdrToSep7 = function (conf, xdr, options) {
+  let sep7 = "web+stellar:tx?xdr="
+  sep7 += encodeURIComponent(xdr)
+  if (options.network &amp;&amp; options.network !== "public") {
+    const passphrase = resolve.networkPassphrase(conf, options.network)
+    sep7 += "&amp;network_passphrase=" + encodeURIComponent(passphrase)
+  }
+  if (options.callback) sep7 += "&amp;callback=url:" + encode.url(conf, options.callback)
+  // Not part of the standard.
+  // if (options.horizon) sep7 +="&amp;horizon=" + encode.url(conf, options.horizon)
 
-<div class="section-returns">
-<h5>Returns:</h5>
+  return sep7
+}
 
-        
+/** ****************************    XDR -> URI    ******************************/
 
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
+convert.xdrToTransaction = function (conf, xdr, options = {}) {
+  const transaction = new StellarSdk.Transaction(xdr)
+  if (options.stripSignatures) transaction.signatures = []
+  return transaction
+}
 
+convert.xdrToQuery = function (conf, xdr, options = {}) {
+  let query = "?xdr=" + xdr
+  if (options.network) query += "&amp;network=" + encodeURIComponent(options.network)
+  if (options.horizon) query += "&amp;horizon=" + encode.url(conf, options.horizon)
+  if (options.callback) query += "&amp;callback=" + encode.url(conf, options.callback)
+  return query
+}
 
-    </dd>
-</dl>
+convert.transactionToTdesc = destruct.transaction
 
+convert.jsonToTdesc = function (conf, json) {
+  return JSON.parse(json)
+}
 
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
+convert.tdescToQuery = encode.query
 
-</section>
+convert.queryToUri = function (conf, query) {
+  const page = conf.page || "https://cosmic.link"
+  return page + query
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>signersUtils - Documentation</title>
+    <title>src/event.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,448 +29,110 @@
 
 <div id="main">
     
-    <h1 class="page-title">signersUtils</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>This module provides two ways to generate <a href="SignersUtils.html">SignersUtils</a> for a
-Transaction object. The first one extends the object and is the intended way
-to use those utilities. However, as extending objects can sometimes prove
-inconvenient or intrusive, a second method allows to create a stand-alone
-<a href="SignersUtils.html">SignersUtils</a> tied to a given transaction.</p></div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".extends"><span class="type-signature">(async, static) </span>extends<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {Transaction}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Extends <strong>transaction</strong> with SignersUtils.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Transaction</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id=".for"><span class="type-signature">(async, static) </span>for<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {<a href="SignersUtils.html">SignersUtils</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns SignersUtils for <strong>transaction</strong>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_signers-utils.js.html">src/signers-utils.js</a>, <a href="src_signers-utils.js.html#line140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transaction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Transaction</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code><a href="SignersUtils.html">SignersUtils</a></code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/event.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict"
+/**
+ * Contains the methods to trigger and handle events.
+ *
+ * @private
+ * @exports event
+ */
+const event = exports
+
+const helpers = require("@cosmic-plus/jsutils/misc")
+
+const format = require("./format")
+
+/** *** Click events *****/
+
+/**
+ * Set the click handler for **type** HTML elements as **callback**.
+ *
+ * @example
+ * cosmicLib.config.setClickHandler('address', showAddressPopup)
+ *
+ * @param {string} type Type of a transaction/operation field such as
+ *     `address`, `asset`, `hash`, ...
+ * @param {function} callback A function that accept one `event` argument
+ */
+event.setClickHandler = function (conf, type, callback) {
+  conf.clickHandlers[type] = callback
+}
+
+/**
+ * Remove the current click handler for **type**.
+ *
+ * @example
+ * cosmicLib.config.clearClickHandler('address')
+ *
+ * @param {string} type Type of a transaction/operation field such as
+ *     `address`, `asset`, `hash`, ...
+ */
+event.clearClickHandler = function (conf, type) {
+  conf.clickHandlers[type] = undefined
+}
+
+event.callClickHandler = function (conf, type, event) {
+  const handler = conf.clickHandlers[type]
+  event.extra = event.domNode.extra
+  event.field = event.domNode.field
+  event.tdesc = format.parentTdesc(conf, event.domNode)
+  event.odesc = format.parentOdesc(conf, event.domNode)
+  event.index = format.parentIndex(conf, event.domNode)
+  if (handler) handler(event)
+}
+
+/**
+ * The active click handlers. Takes the form:
+ *
+ * ```
+ * cosmicLib.config.clickHandlers = {
+ *   type1: callback1,
+ *   ...
+ *   typeN: callbackN
+ * }
+ * ```
+ *
+ * Thoses click handlers are set by default:
+ *
+ * * **address**: A prompt that shows the address details
+ * * **id**: A function that copy the id into the clipboard
+ * * **hash**: A function that copy the hash into the clipboard or show a prompt
+ *   for preimage signature when relevant
+ * ```
+ */
+event.defaultClickHandlers = {
+  address: function (event) {
+    if (!event.extra) return
+    let message = ""
+    for (let field in event.extra) {
+      message += `${field}:\n` + `${event.extra[field]}\n\n`
+    }
+    window.alert(message)
+  },
+  hash: function (event) {
+    const grandma = event.domNode.parentNode.parentNode.parentNode
+    if (grandma.classList.contains("cosmiclib_signers")) {
+      const preimage = prompt("Please enter preimage:")
+      if (preimage) event.cosmicLink.sign(preimage)
+    } else {
+      helpers.copy(event.value)
+    }
+  },
+  id: helpers.copy
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
