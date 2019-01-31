@@ -51,6 +51,7 @@ const format = exports
 
 const helpers = require("@cosmic-plus/jsutils/misc")
 const html = require("@cosmic-plus/jsutils/html")
+const nice = require("@cosmic-plus/jsutils/nice")
 const StellarSdk = require("@cosmic-plus/base/stellar-sdk")
 
 const config = require("./config")
@@ -175,7 +176,7 @@ function operationMeaning (odesc) {
       return "Accept asset {asset}"
     }
   case "createAccount":
-    return "Create account {destination} and send it {startingBalance} XLM"
+    return "Create account {destination} and send {startingBalance} XLM to it"
   case "createPassiveOffer":
     return "Passive offer of {amount} {selling} at {price} {buying} / unit"
   case "inflation":
@@ -345,7 +346,7 @@ format.type = function (conf, type, value) {
   if (typeof value === "object" &amp;&amp; value.error) type = "error"
   const formatter = process[type] || process.string
   const domNode = formatter(conf, value)
-  domNode.className = "cosmiclib_" + type
+  html.addClass(domNode, "cosmiclib_" + type)
 
   const eventObject = {
     conf: conf,
@@ -354,7 +355,10 @@ format.type = function (conf, type, value) {
     domNode: domNode
   }
   if (conf.constructor.name === "CosmicLink") eventObject.cosmicLink = conf
-  domNode.onclick = () => event.callClickHandler(conf, type, eventObject)
+  if (event.defaultClickHandlers[type]) {
+    domNode.onclick = () => event.callClickHandler(conf, type, eventObject)
+    html.addClass(domNode, "cosmiclib_clickable")
+  }
   return domNode
 }
 
@@ -402,48 +406,37 @@ async function resolveAddressAndUpdate (conf, address, addressNode) {
 
     if (account.address) addressNode.textContent = account.address
     else if (account.alias) addressNode.textContent = account.alias
-
     addressNode.extra = account
+
   } catch (error) {
     addressNode.title = "Can't resolve address"
     html.addClass(addressNode, "cosmiclib_error")
-
-    const parent = addressNode.parentNode
-    if (parent.classList.contains("cosmiclib_assetIssuer")) {
-      parent.style.display = "inline"
-    }
   }
 
   const animation = html.grab(".cosmiclib_loadingAnim", addressNode)
   if (animation) html.destroy(animation)
-  const grandpa = addressNode.parentNode.parentNode
-  if (grandpa &amp;&amp; grandpa.classList.contains("cosmiclib_asset")) {
-    html.destroy(html.grab(".cosmiclib_loadingAnim", grandpa))
-    const odesc = format.parentOdesc(conf, grandpa)
-    if (odesc &amp;&amp; odesc.type === "changeTrust") {
-      addressNode.parentNode.style.display = "inline"
-    }
+}
+
+process.amount = function (conf, amount, significant = 3, max = 7) {
+  // Hide non-significant numbers
+  if (typeof amount !== "number") amount = Number(amount)
+  const nicified = nice(amount, { significant, max })
+  if (String(amount).length &lt;= nicified.length) {
+    return html.create("span", null, nicified)
+  } else {
+    return html.create("span",
+      { className: "cosmiclib_clickable", title: amount },
+      nicified, html.create("span", ".cosmiclib_ellipsis", "..."))
   }
 }
 
 process.asset = function (conf, asset) {
-  const codeNode = format.field(conf, "assetCode", asset.code)
-  const issuerNode = html.create("span", null, " issued by ")
-  const assetNode = html.create("span", null, codeNode, issuerNode)
-  issuerNode.style.display = "none"
+  const assetNode = html.create("span", null,
+    format.field(conf, "assetCode", asset.code))
 
   if (asset.issuer) {
-    codeNode.title = "Issued by " + asset.issuer
-    html.append(issuerNode, format.field(conf, "assetIssuer", asset.issuer))
-    html.append(codeNode, html.create("span", ".cosmiclib_loadingAnim"))
-  } else {
-    codeNode.title = "Native asset"
-    html.rewrite(issuerNode, " native asset")
-  }
-
-  codeNode.onclick = () => {
-    if (issuerNode.style.display === "inline") issuerNode.style.display = "none"
-    else issuerNode.style.display = "inline"
+    html.append(assetNode,
+      " (", format.field(conf, "assetIssuer", asset.issuer), ")")
   }
 
   return assetNode
@@ -512,15 +505,12 @@ process.memo = function (conf, memo) {
   case "return":
     valueNode = format.field(conf, "memoReturn", memo.value)
   }
-  return html.create("span", {}, "(", typeNode, ") ", valueNode)
+  return html.create("span", {}, valueNode, " (", typeNode, ")")
 }
 
 process.price = function (conf, price) {
-  if (typeof price === "string") {
-    return html.create("span", {}, price)
-  } else {
-    return html.create("span", {}, price.n / price.d + "")
-  }
+  if (typeof price === "string") return process.amount(conf, price, 3, null)
+  else return process.amount(conf, price.n / price.d, 3, null)
 }
 
 process.signer = function (conf, signer) {
