@@ -65,13 +65,15 @@ operations should be described sequentially.</p>
 <h3>XDR link</h3><blockquote>
 <p>...?xdr={xdr}&amp;{...options}</p>
 </blockquote>
-<p>5 options are possible:</p>
+<p>6 options are possible:</p>
 <ul>
-<li><code>&amp;network=[public|test]</code>: This one is always recommended as <em>cosmic-lib</em>
+<li><code>&amp;network=[&quot;public&quot;|&quot;test&quot;|{passphrase}]</code>: This one is always recommended as <em>cosmic-lib</em>
 won't automatically detect the valid network for {xdr}, and the default
 network may vary from one service to another.</li>
-<li><code>&amp;horizon=${url}</code>: Provide a fallback Horizon node for custom network in case
+<li><code>&amp;horizon={url}</code>: Provide a fallback Horizon node for custom network in case
 the client doesn't know any.</li>
+<li><code>&amp;callback={url}</code>: Provide the destination at which the signed transaction
+must be posted.</li>
 <li><code>&amp;stripSignatures</code>: Remove the signatures when parsing the transaction.</li>
 <li><code>&amp;stripSequence</code>: Remove sequence number when parsing the transaction. Meaning it
 can be signed anytime in the future, possibly several times. Imply
@@ -89,7 +91,7 @@ For multi-operations links, <code>source</code> will become the default source f
 operation that doesn't define one. In cosmic links, having a <code>source</code> is
 optional as the source can be set by the wallet service when signing.</p>
 <h4>network</h4><blockquote>
-<p>&amp;network={public|test}</p>
+<p>&amp;network=[&quot;public&quot;|&quot;test&quot;|{passphrase}]</p>
 </blockquote>
 <p>Tie the transaction to a specific network.</p>
 <h4>horizon</h4><blockquote>
@@ -97,6 +99,10 @@ optional as the source can be set by the wallet service when signing.</p>
 </blockquote>
 <p>Provide a fallback Horizon node for custom network in case the client doesn't
 know any.</p>
+<h4>callback</h4><blockquote>
+<p>&amp;callback={url}</p>
+</blockquote>
+<p>Provide the destination at which the signed transaction must be posted.</p>
 <h4>memo</h4><p>The general syntax for memos is:</p>
 <blockquote>
 <p>&amp;memo={memoType}:{memoValue}</p>
@@ -112,10 +118,16 @@ for text memo exist aswell:</p>
 <p>Where <code>{address}</code> is either a federated address or an account ID, as any address
 in <code>js-cosmic-lib</code>.</p>
 <h4>minTime / maxTime</h4><blockquote>
-<p>&amp;minTime={YYYY-MM-DD}
-&amp;maxTime={YYYY-MM-DDTHH:mm:ssZ}</p>
+<p>&amp;minTime|maxTime={YYYY-MM-DD}
+&amp;minTime|maxTime={YYYY-MM-DDTHH:mm:ssZ}</p>
 </blockquote>
 <p>This is the ISO 8601 date format.</p>
+<blockquote>
+<p>&amp;minTime|maxTime=+{minutes}</p>
+</blockquote>
+<p>This is a syntactic sugar to define minTime/maxTime relatively to the current
+time, in minutes. This gets immediately computed into the corresponding UTC
+date.</p>
 <h4>sequence</h4><blockquote>
 <p>&amp;sequence={integer}</p>
 </blockquote>
@@ -154,7 +166,7 @@ in <code>js-cosmic-lib</code>.</p>
 </ul>
 <h4>changeTrust</h4><p>Accept <code>asset</code>.</p>
 <blockquote>
-<p>...?changeTrust&amp;asset={assetCode:issuerAddress}</p>
+<p>...?changeTrust&amp;asset={assetCode}:{assetIssuer}</p>
 </blockquote>
 <p>Optional fields:</p>
 <ul>
@@ -172,12 +184,12 @@ in <code>js-cosmic-lib</code>.</p>
 </ul>
 <h4>createPassiveOffer</h4><p>Sell <code>amount</code> <code>selling</code> under <code>price</code> <code>buying</code>.</p>
 <blockquote>
-<p>...?createPassiveOffer&amp;selling={assetCode:issuerAddress}&amp;buying={assetCode:issuerAddress}&amp;amount={amount}&amp;price={price}</p>
+<p>...?createPassiveOffer&amp;selling={assetCode}:{assetIssuer}&amp;buying={assetCode}:{assetIssuer}&amp;amount={amount}&amp;price={price}</p>
 </blockquote>
 <p>Notes:</p>
 <ul>
 <li><code>selling</code> or <code>buying</code> field may be omitted when it is lumens.</li>
-<li><code>price</code> can also be a fraction like: 1:2, 1:100, or buyingAmount:sellingAmount</li>
+<li><code>price</code> can also be a fraction, like <code>1:2</code>, <code>1:100</code>, or <code>{buyingAmount}:{sellingAmount}</code>.</li>
 </ul>
 <p>Optional fields:</p>
 <ul>
@@ -202,12 +214,12 @@ in <code>js-cosmic-lib</code>.</p>
 </ul>
 <h4>manageOffer</h4><p>Sell <code>amount</code> <code>selling</code> at <code>price</code> <code>buying</code>.</p>
 <blockquote>
-<p>...?manageOffer&amp;selling={assetCode:issuerAddress}&amp;buying={assetCode:issuerAddress}&amp;amount={amount}&amp;price={price}</p>
+<p>...?manageOffer&amp;selling={assetCode}:{assetIssuer}&amp;buying={assetCode}:{assetIssuer}&amp;amount={amount}&amp;price={price}</p>
 </blockquote>
 <p>Notes:</p>
 <ul>
 <li><code>selling</code> or <code>buying</code> field may be omitted when it is lumens.</li>
-<li><code>price</code> can also be a fraction like: 1:2, 1:100, or buyingAmount:sellingAmount</li>
+<li><code>price</code> can also be a fraction, like <code>1:2</code>, <code>1:100</code>, or <code>{buyingAmount}:{sellingAmount}</code>.</li>
 </ul>
 <p>Optional fields:</p>
 <ul>
@@ -222,8 +234,8 @@ in <code>js-cosmic-lib</code>.</p>
 <h4>pathPayment</h4><p>Send <code>destAmount</code> <code>destAsset</code> to <code>destination</code> for <code>sendMax</code> <code>sendAsset</code> using
 the available offers for the conversion.</p>
 <blockquote>
-<p>...?pathPayment&amp;destination={address}&amp;destAmount={amount}&amp;destAsset={assetCode:assetIssuer}
-    &amp;sendMax={amount}&amp;sendAsset={assetCode:assetIssuer}</p>
+<p>...?pathPayment&amp;destination={address}&amp;destAmount={amount}&amp;destAsset={assetCode}:{assetIssuer}
+    &amp;sendMax={amount}&amp;sendAsset={assetCode}:{assetIssuer}</p>
 </blockquote>
 <p>Notes:</p>
 <ul>
@@ -231,10 +243,10 @@ the available offers for the conversion.</p>
 </ul>
 <p>Optional fields:</p>
 <ul>
-<li>&amp;path={asset1,asset2,...,assetN} Where each asset is <code>assetCode:assetIssuer</code>
-or <code>XLM</code>. Define a conversion path to follow. If neither <code>destAsset</code> or
-<code>sendAsset</code> are lumens, you'll likely need <code>&amp;path=XLM</code> to set lumens as an
-intermediate conversion step.</li>
+<li>&amp;path={asset1},{asset2},...,{assetN} Where each asset is
+<code>{assetCode}:{assetIssuer}</code> or <code>XLM</code>. Define a conversion path to follow. If
+neither <code>destAsset</code> or <code>sendAsset</code> are lumens, you'll likely need <code>&amp;path=XLM</code>
+to set lumens as an intermediate conversion step.</li>
 <li>&amp;source={address}</li>
 </ul>
 <h4>payment</h4><p>Send <code>amount</code> <code>asset</code> to <code>destination</code>.</p>
@@ -243,7 +255,7 @@ intermediate conversion step.</li>
 </blockquote>
 <p>Optional fields:</p>
 <ul>
-<li>&amp;asset={assetCode:assetIssuer} Define <code>asset</code> when it is not lumens.</li>
+<li>&amp;asset={assetCode}:{assetIssuer} Define <code>asset</code> when it is not lumens.</li>
 <li>&amp;source={address}</li>
 </ul>
 <h4>setOptions</h4><p>Allow various actions depending on the optional fields you use. Without any
@@ -261,7 +273,7 @@ field this is a void operation.</p>
 <li>&amp;lowThreshold={weight} The sum weight for the low threshold.</li>
 <li>&amp;medThreshold={weight} The sum weight for the medium threshold.</li>
 <li>&amp;highThreshold={weight} The sum weight for the high threshold.</li>
-<li>&amp;signer={weight:type:value} If <code>weight</code> is set to 0, remove a signer from
+<li>&amp;signer={weight}:{type}:{value} If <code>weight</code> is set to 0, remove a signer from
 <code>source</code> account, else edit or add one. <code>type</code> can be either:<ul>
 <li><code>key</code>: refer to another account</li>
 <li><code>tx</code>: refer to a transaction hash</li>

@@ -85,31 +85,15 @@ const CosmicLink = cosmicLib.CosmicLink</code></pre><h3>Bower</h3><pre class="pr
   &lt;script src=&quot;./bower_components/cosmic-lib/cosmic-lib.js&quot;>&lt;/script></code></pre><h3>Web</h3><pre class="prettyprint source lang-HTML"><code>  &lt;script src=&quot;https://cosmic.plus/stellar-sdk/stellar-sdk.min.js&quot;>&lt;/script>
   &lt;script src=&quot;https://cosmic.plus/web-cosmic-lib/cosmic-lib.js&quot;>&lt;/script></code></pre><p><strong>Note</strong>: For production release it is advised to serve your own copy of the
 libraries.</p>
-<h2>Basic Usage</h2><h3>Configuration</h3><pre class="prettyprint source lang-js"><code>/**
- * Fallback network for network-less transaction requests.
- * @default &quot;public&quot;
- */
-cosmicLib.config.network = &quot;test&quot;
-
-/**
- * Fallback account for source-less transaction requests.
- * @default undefined
- */
-cosmicLib.config.source = &quot;tips*cosmic.link&quot; // Undefined by default
-
-/**
- * Base URL to use when building CosmicLinks.
- * @default &quot;https://cosmic.link/&quot;
- */
-cosmicLib.config.page = &quot;https://cosmic.link/&quot;</code></pre><h3>Create CosmicLinks</h3><h4>New Transaction</h4><p>The transaction builder is similar to the one provided by StellarSdk.
+<h2>Basic Usage</h2><h3>Create CosmicLinks</h3><h4>New Transaction</h4><p>The transaction builder is similar to the one provided by StellarSdk.
 Additionally, it accepts federated addresses and offer syntactic sugar for
 memos, dates and assets.</p>
 <pre class="prettyprint source lang-js"><code>const cosmicLink = new CosmicLink({ network: 'test', memo: 'Demo', maxTime: '2019-01' })
   .addOperation('payment', { destination: 'tips*cosmic.link', amount: 10 }) // XLM is implied
   .addOperation('changeTrust', { asset: 'CNY:admin*ripplefox.com' }) // Max limit is implied
   .addOperation(...)</code></pre><h4>From an Existing Transaction</h4><ul>
-<li>From a StellarSdk Transaction: <code>new CosmicLink(transaction, { network: &quot;public&quot; | &quot;test&quot; })</code></li>
-<li>From an XDR: <code>new CosmicLink(xdr, { network: &quot;public&quot; | &quot;test&quot; })</code></li>
+<li>From a StellarSdk Transaction: <code>new CosmicLink(transaction, { network: &quot;public&quot; | &quot;test&quot; | passphrase })</code></li>
+<li>From an XDR: <code>new CosmicLink(xdr, { network: &quot;public&quot; | &quot;test&quot; | passphrase })</code></li>
 <li>From a CosmicLink URI/query: <code>new CosmicLink(uri|query)</code></li>
 <li>From a SEP-0007 link: <code>new CosmicLink(sep7)</code></li>
 </ul>
@@ -149,7 +133,23 @@ await cosmicLink.lock()
 cosmicLink.sign(...(keypair | preimage))
 await cosmicLink.send()</code></pre><p><strong>Note</strong>: the transaction will automatically be transmitted to
 <a href="https://stellarguard.me">StellarGuard</a> when relevant.</p>
-<h3>Advanced configuration</h3><p>Setting the Horizon node for a given network:</p>
+<h3>Global Configuration</h3><pre class="prettyprint source lang-js"><code>/**
+ * Fallback network for network-less transaction requests.
+ * @default &quot;public&quot;
+ */
+cosmicLib.config.network = &quot;test&quot;
+
+/**
+ * Fallback account for source-less transaction requests.
+ * @default undefined
+ */
+cosmicLib.config.source = &quot;tips*cosmic.link&quot; // Undefined by default
+
+/**
+ * Base URL to use when building CosmicLinks.
+ * @default &quot;https://cosmic.link/&quot;
+ */
+cosmicLib.config.page = &quot;https://cosmic.link/&quot;</code></pre><h3>Advanced configuration</h3><p>Setting the Horizon node for a given network:</p>
 <pre class="prettyprint source lang-js"><code>cosmicLib.config.setupNetwork(&quot;test&quot;, &quot;https://horizon.example.org&quot;)</code></pre><p>Adding a custom network:</p>
 <pre class="prettyprint source lang-js"><code>cosmicLib.config.setupNetwork(
   &quot;myCustomNetwork&quot;,
@@ -168,7 +168,7 @@ utilities:</p>
 console.log(transaction.signers)
 console.log(transaction.signersList)
 transaction.hasSigner(&quot;GB...DECX&quot;)
-transaction.hasSigned(&quot;GB...DECX&quot;)</code></pre><h2>Additional ressources</h2><h3>Release</h3><p>This is the beta-2 release. The codebase is mature and few to no compatibility
+transaction.hasSigned(&quot;GB...DECX&quot;)</code></pre><h2>Release</h2><p>This is the beta-2 release. The codebase is mature and few to no compatibility
 breaks are expected.</p>
 <ul>
 <li><a href="https://github.com/cosmic-plus/node-cosmic-lib">GitHub repository</a></li>
@@ -177,7 +177,7 @@ breaks are expected.</p>
 <li><a href="https://github.com/cosmic-plus/node-cosmic-lib/blob/master/CHANGELOG.md">Changelog</a></li>
 <li><a href="https://github.com/cosmic-plus/node-cosmic-lib/blob/master/TODO.md">Tasklist</a></li>
 </ul>
-<h3>Documentation</h3><p>cosmic-lib packs more that showed in this brief presentation. Please take a
+<h2>Additional ressources</h2><h3>Documentation</h3><p>cosmic-lib packs more that showed in this brief presentation. Please take a
 look at the manual:</p>
 <ul>
 <li><a href="https://cosmic.plus/cosmic-lib/doc/CosmicLink.html">Complete documentation</a></li>
