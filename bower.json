@@ -2,12 +2,12 @@
   "name": "cosmic-lib",
   "description": "A JavaScript implementation of the CosmicLink protocol for Stellar",
   "authors": [ "MisterTicot" ],
-  "homepage": "https://github.com/cosmic-plus/node-cosmic-lib",
+  "homepage": "https://cosmic.plus/#view:js-cosmic-lib",
   "licence": "MIT",
   "keywords": [ "cryptocurrency", "stellar", "cosmic", "link", "library" ],
   "main": "cosmic-lib.js",
   "ignore": [ ".*", "package-lock.json", "doc" ],
   "dependencies": {
-    "stellar-sdk": ">=0.15.0"
+    "stellar-sdk": "^2.0.1"
   }
 }
