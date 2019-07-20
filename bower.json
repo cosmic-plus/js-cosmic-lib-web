@@ -4,7 +4,8 @@
   "authors": [ "MisterTicot" ],
   "homepage": "https://cosmic.plus/#view:js-cosmic-lib",
   "licence": "MIT",
-  "keywords": [ "cryptocurrency", "stellar", "cosmic", "link", "library" ],
+  "keywords": [ "stellar", "CosmicLink", "SEP-0007", "transaction", "request",
+    "QRcode", "browser", "node" ],
   "main": "cosmic-lib.js",
   "ignore": [ ".*", "package-lock.json", "doc" ],
   "dependencies": {
