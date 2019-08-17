@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.0 - 2019-08-17
+
+### Added
+
+- Api: Add action `cosmicLink.open(target)`. Valid targets are:
+  - `frame` (default): Open cosmicLink in a side-frame.
+  - `tab`: Open cosmicLink in a new tab.
+  - `current`: Open cosmicLink into the current window.
+  - `sep7`: Open cosmicLink using user's SEP-0007 handler.
+- Api: Add SEP-0007 signature check.
+  - `cosmicLink.extra.originDomain` is a _Promise_ that resolves to the
+    origin_domain parameter when the link signature is valid. It rejects an
+    error when the signature check fails. This property is `undefined` when the
+    link has no origin_domain.
+  - `cosmicLink.extra.signature` contains the link signature, if any.
+- Demo: Add a link to register as a SEP-0007 handler.
+
+### Fixed
+
+- Api: Fix SEP-0007 `callback` parameter encoding. (thanks [@pselden] &
+  [@nikhilsaraf])
+- Demo: Fix the 'computing...' message in format boxes.
+
 ## 1.6.0 - 2019-08-10
 
 ### Added
@@ -161,4 +184,6 @@ There is no changelog for older releases. Please take a look at the [commit
 history](https://github.com/cosmic-plus/js-cosmic-lib/commits/master).
 
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
+[@nikhilsaraf]: https://github.com/nikhilsaraf
+[@pselden]: https://github.com/pselden
 [@tyvdh]: https://github.com/tyvdh

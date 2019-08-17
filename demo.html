@@ -6,6 +6,8 @@
     default-src 'none';
     script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
     style-src 'self' 'unsafe-inline' https://necolas.github.io;
+    img-src 'self' data:;
+    frame-src *;
     connect-src *;
   ">
 
@@ -91,7 +93,7 @@
 
   // Compute XDR and update boxes accordingly.
   function lock () {
-    formats.forEach(format => formatBoxes[format].placeholdr = 'Computing...')
+    formats.forEach(format => formatBoxes[format].placeholder = 'Computing...')
 
     cosmicLink.lock({ network: networkBox.value, source: sourceBox.value })
       .then(function (obj) {
@@ -133,6 +135,24 @@
     promise.then(display).catch(display).finally(enableButtons)
   }
 
+  function openLink (target) {
+    try {
+      cosmicLink.open(target)
+    } catch (error) {
+      console.error(error)
+      display(error.message)
+    }
+  }
+
+  function registerSep7Handler () {
+    const service = location.href.slice(0, -location.search.length)
+    navigator.registerProtocolHandler(
+      "web+stellar",
+      `${service}?req=%s`,
+      "Cosmic.plus SEP-0007 debugger"
+    )
+  }
+
   /** Helpers **/
 
   // Display a message in the interface
@@ -169,6 +189,18 @@
     callbackBox.value = cosmicLink.callback || ""
     sourceBox.value = cosmicLink.source || ""
     extraBox.value = JSON.stringify(cosmicLink.extra, null, 2)
+
+
+    // SEP-0007: Update origin_domain after signature check.
+    if (cosmicLink.extra.originDomain) {
+      cosmicLink.extra.originDomain.then(origin => {
+        cosmicLink.extra.originDomain = origin
+      }).catch(error => {
+        cosmicLink.extra.originDomain = error
+      }).finally(() => {
+        extraBox.value = JSON.stringify(cosmicLink.extra, null, 2)
+      })
+    }
 
     // Refresh format boxes.
     formats.forEach(format => {
@@ -277,16 +309,34 @@ input, textarea {
         <input id="sendButton" type="button" value="Send" onclick="send()">
         <pre id="message"></pre>
       </form>
-      <h2>
-        <a id="cosmiclink" title="Open page" target="_blank" rel="noopener">Open Link</a>
-      </h2>
+
+      <h2>Open</h2>
+      <ul>
+        <li><a href="javascript:openLink('frame')">
+          Open in side-frame
+        </a></li>
+        <li><a href="javascript:openLink('tab')">
+          Open in new tab
+        </a></li>
+        <li><a href="javascript:openLink('current')">
+          Open in current window
+        </a></li>
+        <li><a href="javascript:openLink('sep7')">
+          Open with your SEP-0007 handler
+        </a></li>
+      </ul>
+
+      <h2>Setup</h2>
+      <ul>
+        <li><a href="javascript:registerSep7Handler()">
+          Set this page as your SEP-0007 handler
+        </a></li>
+      </ul>
     </div>
+
     <div class="column">
-      <!-- An HTML element with id="cosmiclink" will automatically points to
-           the last cosmicLink URI
-      -->
-      <h2>Edit</h2>
       <form autocomplete="off">
+        <h2>Meta-Parameters</h2>
         <label for="page">Page:</label>
         <input id="page" type="text" onchange="set()">
         <label for="network">Network:</label>
@@ -297,7 +347,9 @@ input, textarea {
         <input id="callback" type="text" onchange="set()">
         <label for="source">Source:</label>
         <input id="source" type="text" onchange="set()">
-        <label for="uri">Link:</label>
+
+        <h2>Formats</h2>
+        <label for="uri">URI:</label>
         <input id="uri" type="text" placeholder="URI">
         <label for="query">Query:</label>
         <input id="query" type="text" placeholder="Query">
