@@ -95,6 +95,7 @@ construct.operation = async function (conf, odesc) {
   delete odesc.type
 
   for (let field in odesc) {
+    // eslint-disable-next-line require-atomic-updates
     odesc[field] = await construct.field(conf, field, odesc[field])
   }
 
@@ -109,6 +110,7 @@ async function makeTransactionBuilder (conf, tdesc) {
   const baseFee = await server.fetchBaseFee()
 
   let txOpts = {}
+  txOpts.networkPassphrase = resolve.networkPassphrase(conf)
   if (tdesc.fee) txOpts.fee = tdesc.fee
   else txOpts.fee = tdesc.operations.length * baseFee
   if (tdesc.memo) txOpts.memo = construct.memo(conf, tdesc.memo)
@@ -147,6 +149,7 @@ async function makeTransactionBuilder (conf, tdesc) {
             "throw"
           )
         } else {
+          // eslint-disable-next-line require-atomic-updates
           tdesc.memo = { type: memoType, value: memoValue }
           builder.addMemo(new StellarSdk.Memo(memoType, memoValue))
         }

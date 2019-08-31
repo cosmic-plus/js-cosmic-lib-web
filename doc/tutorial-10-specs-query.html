@@ -47,61 +47,49 @@ methods.</p>
 <h2>General syntax</h2>
 <h3>One-operation link</h3>
 <blockquote>
-<p>...?{operation}&amp;{field}={value}&amp;{...more_fields}</p>
+<p>...?type={operation}&amp;{field}={value}&amp;{...more_fields}</p>
 </blockquote>
-<p>Where <code>{field}</code> can be either a transaction field or a valid field for
-<code>{operation}</code>.</p>
+<p>Where <code>{field}</code> can be either a meta field, a transaction field or a valid field
+for <code>{operation}</code>.</p>
 <p>Example:</p>
 <blockquote>
 <p><a href="https:%5C/%5C/cosmic.link/?payment&amp;memo=Donation&amp;destination=tips*cosmic.link&amp;amount=100">https://cosmic.link/?payment&amp;memo=Donation&amp;destination=tips*cosmic.link&amp;amount=100</a></p>
 </blockquote>
 <h3>Multi-operation link</h3>
 <blockquote>
-<p>...?transaction&amp;{...transactionFields}&amp;operation={operation}&amp;{...operationFields}&amp;{...more_operations}</p>
+<p>...?type=transaction&amp;{...metaFields|transactionFields}&amp;operation={operation}&amp;{...operationFields}&amp;{...more_operations}</p>
 </blockquote>
-<p>Because both the transaction and each operation can have a <code>source</code>
-field, transactions fields have to be provided prior to any operation, then the
-operations should be described sequentially.</p>
+<p>Meta fields and transactions fields have to be provided prior to any operation,
+then the operations should be described sequentially.</p>
 <p>Example:</p>
 <blockquote>
 <p><a href="https:%5C/%5C/cosmic.link/?transaction&amp;memo=Example&amp;operation=setOptions&amp;homeDomain=example.org&amp;operation=manageData&amp;name=Wallet&amp;value=example-wallet">https://cosmic.link/?transaction&amp;memo=Example&amp;operation=setOptions&amp;homeDomain=example.org&amp;operation=manageData&amp;name=Wallet&amp;value=example-wallet</a></p>
 </blockquote>
 <h3>XDR link</h3>
 <blockquote>
-<p>...?xdr={xdr}&amp;{...options}</p>
+<p>...?xdr={xdr}&amp;{...metaFields}[&amp;strip=source|sequence|signatures]</p>
 </blockquote>
-<p>6 options are possible:</p>
 <ul>
-<li><code>&amp;network=[&quot;public&quot;|&quot;test&quot;|{passphrase}]</code>: This one is always recommended as <em>cosmic-lib</em>
-won't automatically detect the valid network for {xdr}, and the default
-network may vary from one service to another.</li>
-<li><code>&amp;horizon={url}</code>: Provide a fallback Horizon node for custom network in case
-the client doesn't know any.</li>
-<li><code>&amp;callback={url}</code>: Provide the destination at which the signed transaction
-must be posted.</li>
-<li><code>&amp;stripSignatures</code>: Remove the signatures when parsing the transaction.</li>
-<li><code>&amp;stripSequence</code>: Remove sequence number when parsing the transaction. Meaning it
-can be signed anytime in the future, possibly several times. Imply
-<code>&amp;stripSignatures</code>.</li>
-<li><code>&amp;stripSource</code>: Remove the source account when parsing the transaction. Meaning
-it can be signed by anybody, possibly several times. Imply <code>&amp;stripSequence</code>
-and <code>&amp;stripSignatures</code>.</li>
+<li><code>&amp;strip</code>: Remove an element from the original XDR transaction. Stripping out
+sequence means that the transaction request can get signed anytime in the
+future, possibly several times. Stripping out source means that it can get
+signed by any account.</li>
 </ul>
 <p>Example:</p>
 <blockquote>
-<p><a href="https://cosmic.link/?xdr=AAAAAL2ef/Z7FpGtgUvkKaEg3uvy9IH+T9chWSUhQILKTk/NAAAAZAEMX34AAAADAAAAAAAAAAAAAAABAAAAAAAAAAUAAAABAAAAAIQ/AS7GRUBBd96ykumKKUFE92+oiwRuJ7KXuvPwwTQWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==&amp;network=public&amp;stripSource">https://cosmic.link/?xdr=AAAA...AA==&amp;network=public&amp;stripSource</a></p>
+<p><a href="https://cosmic.link/?xdr=AAAAAL2ef/Z7FpGtgUvkKaEg3uvy9IH+T9chWSUhQILKTk/NAAAAZAEMX34AAAADAAAAAAAAAAAAAAABAAAAAAAAAAUAAAABAAAAAIQ/AS7GRUBBd96ykumKKUFE92+oiwRuJ7KXuvPwwTQWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==&amp;network=public&amp;strip=source">https://cosmic.link/?xdr=AAAA...AA==&amp;network=public&amp;strip=source</a></p>
 </blockquote>
 <h2>Fields</h2>
-<h3>Transaction fields</h3>
-<p>Those fields may be used in any transaction and are all of them are optionals.
-For multi-operations links, <code>source</code> will become the default source for any
-operation that doesn't define one. In cosmic links, having a <code>source</code> is
-optional as the source can be set by the wallet service when signing.</p>
+<h3>Meta Fields</h3>
+<p>Those fields contains data that is not strictly-speaking part of the
+transaction object, but that is essential to its validation. Those fields are
+optional.</p>
 <h4>network</h4>
 <blockquote>
-<p>&amp;network=[&quot;public&quot;|&quot;test&quot;|{passphrase}]</p>
+<p>&amp;network=public|test|{passphrase}</p>
 </blockquote>
-<p>Tie the transaction to a specific network.</p>
+<p>Tie the transaction to a specific network. Network-less transaction requests are
+interpreted as transactions that can be validated on any network.</p>
 <h4>horizon</h4>
 <blockquote>
 <p>&amp;horizon={url}</p>
@@ -113,6 +101,11 @@ know any.</p>
 <p>&amp;callback={url}</p>
 </blockquote>
 <p>Provide the destination at which the signed transaction must be posted.</p>
+<h3>Transaction fields</h3>
+<p>Those fields may be used in any transaction and are all of them are optionals.
+For multi-operations links, <code>source</code> will become the default source for any
+operation that doesn't define one. In cosmic links, having a <code>source</code> is
+optional as the source can be set by the wallet service when signing.</p>
 <h4>memo</h4>
 <p>The general syntax for memos is:</p>
 <blockquote>

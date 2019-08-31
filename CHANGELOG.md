@@ -1,6 +1,37 @@
+**cosmic-lib /**
+[Documentation](https://cosmic.plus/#view:js-cosmic-lib/web/doc)
+• [Contributing](https://cosmic.plus/#view:js-cosmic-lib/CONTRIBUTING)
+• [Changelog](https://cosmic.plus/#view:js-cosmic-lib/CHANGELOG)
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 1.0.8 - 2019-08-31
+
+### Deprecated
+
+- Api: Deprecate functions related to the global Network class. StellarSdk now
+  uses a scoped network parameter, hence the functions
+  `cosmicLink.selectNetwork()` and `resolve.useNetwork()`, which are helpers to
+  switch the StellarSdk global Network, are now deprecated. Those functions will
+  get removed in sync with StellarSdk removal of its global Network class.
+
+### Added
+
+- Documentation: Add navigation header.
+
+### Changed
+
+- Meta: Upgrade [stellar-sdk] to 3.x.
+- Api: Implement XDR-links param `strip`. It replaces parameters `stripSource`,
+  `stripSequence` & `stripSignatures` by the standard-compliant
+  `strip="source"|"sequence"|"signatures"`.
+- Api: Add a `type=` prefix to param queries. The previous syntax was not
+  standard-compliant. Example:
+  `?type=payment&destination=tips*cosmic.link&amount=20`
+- Documentation: Differenciate between meta & transaction fields.
+- Documentation: Update CONTRIBUTING.md.
 
 ## 1.7.2 - 2019-08-27
 

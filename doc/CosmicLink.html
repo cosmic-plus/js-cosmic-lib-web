@@ -261,7 +261,7 @@ format: uri, query, json, tdesc, transaction, xdr or sep7.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line132">line 132</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -435,13 +435,13 @@ which it have been created</p>
 
         <tr>
             
-                <td class="name"><code>stripSignatures</code></td>
+                <td class="name"><code>strip</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>boolean</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -452,63 +452,11 @@ which it have been created</p>
             
 
             <td class="description last">
-                <p>If set, will strip out signatures
-from XDR/Transaction formats.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>stripSequence</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>boolean</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>If set, will strip out signatures
-and sequence number from XDR/Transaction formats.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>stripSource</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>boolean</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>If set, will strip out signatures,
-sequence number and transaction primary source account from
-XDR/Transaction formats.</p>
+                <p>Remove an element from the original
+XDR transaction. Valid values are <code>source</code>, <code>sequence</code> and
+<code>signatures</code>. Stripping out sequence means that the transaction request
+can get signed anytime in the future, possibly several times.
+Stripping out source means that it can get signed by any account.</p>
                 
             </td>
         </tr>
@@ -625,7 +573,7 @@ computations ensure consistent results.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line605">line 605</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line603">line 603</a>
     </li></ul></dd>
     
 
@@ -694,7 +642,7 @@ either locally (<code>cosmicLink.tdesc.callback</code>) or globally
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line346">line 346</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -758,7 +706,7 @@ either locally (<code>cosmicLink.tdesc.callback</code>) or globally
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line599">line 599</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line597">line 597</a>
     </li></ul></dd>
     
 
@@ -837,7 +785,7 @@ vectors &amp; is discouraged.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line614">line 614</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line612">line 612</a>
     </li></ul></dd>
     
 
@@ -912,7 +860,7 @@ transaction emitter to force us to use a particular Horizon node.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line328">line 328</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -980,7 +928,7 @@ CosmicLink created.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line486">line 486</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line484">line 484</a>
     </li></ul></dd>
     
 
@@ -1044,7 +992,7 @@ CosmicLink created.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line494">line 494</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line492">line 492</a>
     </li></ul></dd>
     
 
@@ -1109,7 +1057,7 @@ CosmicLink created.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line223">line 223</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line221">line 221</a>
     </li></ul></dd>
     
 
@@ -1243,7 +1191,7 @@ one.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line306">line 306</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line304">line 304</a>
     </li></ul></dd>
     
 
@@ -1307,7 +1255,7 @@ one.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line277">line 277</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line275">line 275</a>
     </li></ul></dd>
     
 
@@ -1373,7 +1321,7 @@ conveniently pass around Stellar transactions over any URI.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line169">line 169</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line167">line 167</a>
     </li></ul></dd>
     
 
@@ -1443,7 +1391,7 @@ available.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line268">line 268</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -1511,7 +1459,7 @@ is a fallback value in case the transaction emitter doesn't set one.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line292">line 292</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -1575,7 +1523,7 @@ is a fallback value in case the transaction emitter doesn't set one.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line595">line 595</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line593">line 593</a>
     </li></ul></dd>
     
 
@@ -1660,7 +1608,7 @@ it using the dedicated methods:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line206">line 206</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -1729,7 +1677,7 @@ available.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line237">line 237</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -1795,7 +1743,7 @@ This format is simply the <code>cosmicLink.query</code> appended to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line159">line 159</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line157">line 157</a>
     </li></ul></dd>
     
 
@@ -1864,7 +1812,7 @@ available.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line250">line 250</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line248">line 248</a>
     </li></ul></dd>
     
 
@@ -1939,7 +1887,7 @@ but fields values can be written using query or StellarSdk format as well.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line392">line 392</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line390">line 390</a>
     </li></ul></dd>
     
 
@@ -2134,7 +2082,7 @@ as well.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line415">line 415</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line413">line 413</a>
     </li></ul></dd>
     
 
@@ -2650,7 +2598,7 @@ console.log(cosmicLink.xdr)     // => "AAAA...AA=="</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line510">line 510</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line508">line 508</a>
     </li></ul></dd>
     
 
@@ -2808,7 +2756,7 @@ and the result is similar except that no new CosmicLink object is created.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line149">line 149</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -2891,7 +2839,7 @@ and the result is similar except that no new CosmicLink object is created.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line465">line 465</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line463">line 463</a>
     </li></ul></dd>
     
 
@@ -3161,7 +3109,7 @@ is deleted.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line446">line 446</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line444">line 444</a>
     </li></ul></dd>
     
 
@@ -3380,7 +3328,7 @@ StellarSdk format as well.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line369">line 369</a>
+        <a href="src_cosmiclink.js.html">src/cosmiclink.js</a>, <a href="src_cosmiclink.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -3550,7 +3498,7 @@ CosmicLink have to be <a href="CosmicLink.html#lock">locked</a> before signing.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_action.js.html">src/action.js</a>, <a href="src_action.js.html#line109">line 109</a>
+        <a href="src_action.js.html">src/action.js</a>, <a href="src_action.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
