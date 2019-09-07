@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>src/event.js - Documentation</title>
+    <title>src/sep7-utils.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">src/event.js</h1>
+    <h1 class="page-title">src/sep7-utils.js</h1>
     
 
     
@@ -41,94 +41,219 @@
         <article>
             <pre class="prettyprint source linenums"><code>"use strict"
 /**
- * Contains the methods to trigger and handle events.
+ * Sep-0007 support
+ * https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md
  *
  * @private
- * @exports event
  */
-const event = exports
+const sep7Utils = exports
 
-const html = require("@cosmic-plus/domutils/es5/html")
+const Buffer = require("@cosmic-plus/base/es5/buffer")
+const StellarSdk = require("@cosmic-plus/base/es5/stellar-sdk")
+const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
 
-const format = require("./format")
+const check = require("./check")
+const convert = require("./convert")
+const decode = require("./decode")
+const parse = require("./parse")
 
-/** *** Click events *****/
+/* Parsing */
 
 /**
- * Set the click handler for **type** HTML elements as **callback**.
- *
- * @example
- * cosmicLib.config.setClickHandler('address', showAddressPopup)
- *
- * @param {string} type Type of a transaction/operation field such as
- *     `address`, `asset`, `hash`, ...
- * @param {function} callback A function that accept one `event` argument
+ * Initialize cosmicLink using `sep7Request`.
  */
-event.setClickHandler = function (conf, type, callback) {
-  conf.clickHandlers[type] = callback
+sep7Utils.parseRequest = function (cosmicLink, sep7Request, options) {
+  parse.page(cosmicLink, sep7Request)
+
+  const query = convert.uriToQuery(cosmicLink, sep7Request)
+  const sep7 = decodeURIComponent(query.substr(5))
+  return sep7Utils.parseLink(cosmicLink, sep7, options)
 }
 
 /**
- * Remove the current click handler for **type**.
- *
- * @example
- * cosmicLib.config.clearClickHandler('address')
- *
- * @param {string} type Type of a transaction/operation field such as
- *     `address`, `asset`, `hash`, ...
+ * Initialize cosmicLink using `sep7`.
  */
-event.clearClickHandler = function (conf, type) {
-  conf.clickHandlers[type] = undefined
-}
-
-event.callClickHandler = function (conf, type, event) {
-  const handler = conf.clickHandlers[type]
-  event.extra = event.domNode.extra
-  event.field = event.domNode.field
-  event.tdesc = format.parentTdesc(conf, event.domNode)
-  event.odesc = format.parentOdesc(conf, event.domNode)
-  event.index = format.parentIndex(conf, event.domNode)
-  if (handler) handler(event)
+sep7Utils.parseLink = function (cosmicLink, sep7, options = {}) {
+  cosmicLink._sep7 = sep7
+  if (!options.network) options.network = "public"
+  if (sep7.substr(12, 4) === "pay?") {
+    cosmicLink.extra.type = "pay"
+    return sep7Utils.parsePayLink(cosmicLink, sep7, options)
+  } else if (sep7.substr(12, 3) === "tx?") {
+    cosmicLink.extra.type = "tx"
+    return sep7Utils.parseTxLink(cosmicLink, sep7, options)
+  } else {
+    throw new Error("Invalid SEP-0007 link.")
+  }
 }
 
 /**
- * The active click handlers. Takes the form:
- *
- * ```
- * cosmicLib.config.clickHandlers = {
- *   type1: callback1,
- *   ...
- *   typeN: callbackN
- * }
- * ```
- *
- * Thoses click handlers are set by default:
- *
- * * **address**: A prompt that shows the address details
- * * **id**: A function that copy the id into the clipboard
- * * **hash**: A function that copy the hash into the clipboard or show a prompt
- *   for preimage signature when relevant
- * ```
+ * Initialize cosmicLink using `sep7.xdr`.
  */
-event.defaultClickHandlers = {
-  address: function (event) {
-    if (!event.extra) return
-    let message = ""
-    for (let field in event.extra) {
-      message += `${field}:\n` + `${event.extra[field]}\n\n`
+sep7Utils.parseTxLink = function (cosmicLink, sep7, options = {}) {
+  const query = convert.uriToQuery(cosmicLink, sep7)
+  const params = query.substr(1).split("&amp;")
+  let xdr
+
+  params.forEach(entry => {
+    const field = entry.replace(/=.*$/, "")
+    const value = entry.substr(field.length + 1)
+
+    switch (field) {
+    case "xdr":
+      xdr = decodeURIComponent(value)
+      break
+    case "pubkey":
+      check.address(cosmicLink, value)
+      cosmicLink.extra.pubkey = value
+      break
+    default:
+      sep7Utils.parseLinkCommons(cosmicLink, "xdr", field, value, options)
     }
-    window.alert(message)
-  },
-  hash: function (event) {
-    const grandma = event.domNode.parentNode.parentNode.parentNode
-    if (grandma.classList.contains("cosmiclib_signers")) {
-      const preimage = prompt("Please enter preimage:")
-      if (preimage) event.cosmicLink.sign(preimage)
-    } else {
-      html.copyString(event.value)
+  })
+
+  if (!xdr) throw new Error("Missing XDR parameter")
+  options.stripNeutralSequence = true
+  return { type: "xdr", value: xdr, options }
+}
+
+/**
+ * Initialize cosmicLink using `sep7.pay`.
+ */
+sep7Utils.parsePayLink = function (cosmicLink, sep7, options = {}) {
+  const query = convert.uriToQuery(cosmicLink, sep7)
+  const params = query.substr(1).split("&amp;")
+
+  const odesc = { type: "payment" },
+    asset = {},
+    memo = {}
+  const tdesc = {
+    network: options.network,
+    operations: [odesc]
+  }
+
+  // Parse
+  params.forEach(entry => {
+    const field = entry.replace(/=.*$/, "")
+    const value = entry.substr(field.length + 1)
+
+    switch (field) {
+    case "destination":
+    case "amount":
+      odesc[field] = decode.field(cosmicLink, field, value)
+      break
+    case "asset_code":
+      asset.code = decodeURIComponent(value)
+      break
+    case "asset_issuer":
+      asset.issuer = decodeURIComponent(value)
+      break
+    case "memo_type":
+      memo.type = value.split("_")[1].toLowerCase()
+      break
+    case "memo":
+      memo.value = decode.string(cosmicLink, value)
+      break
+    default:
+      sep7Utils.parseLinkCommons(cosmicLink, "pay", field, value, options)
     }
-  },
-  id: event => html.copyString(event.value)
+  })
+
+  // Convert
+  if (memo.type || memo.value) {
+    if (memo.type === "hash" || memo.type === "return") {
+      memo.value = Buffer.from(memo.value, "base64").toString("hex")
+    }
+    tdesc.memo = memo
+  }
+  if (asset.code || asset.issuer) odesc.asset = asset
+
+  if (!odesc.destination) throw new Error("Missing parameter: destination")
+  return { type: "tdesc", value: tdesc, options }
+}
+
+sep7Utils.parseLinkCommons = function (cosmicLink, mode, field, value, options) {
+  switch (field) {
+  case "network_passphrase":
+    options.network = decode.network(cosmicLink, value)
+    break
+  case "callback":
+    value = decode.url(cosmicLink, value)
+    if (value.substr(0, 4) !== "url:") {
+      throw new Error("Invalid callback: " + value)
+    }
+    options.callback = value.substr(4)
+    break
+  case "origin_domain":
+    cosmicLink.extra.originDomain = sep7Utils.verifySignature(
+      cosmicLink,
+      value
+    )
+    break
+  case "signature":
+    cosmicLink.extra.signature = decodeURIComponent(value)
+    break
+  case "msg":
+    cosmicLink.extra.msg = decode.string(cosmicLink, value)
+    break
+  default:
+    throw new Error(`Invalid SEP-0007 ${mode} field: ` + field)
+  }
+}
+
+/* Signing */
+
+sep7Utils.signLink = async function (cosmicLink, domain, keypair) {
+  if (!cosmicLink.locker) throw new Error("cosmicLink is not locked.")
+
+  cosmicLink.extra.originDomain = domain
+  delete cosmicLink.extra.signature
+  delete cosmicLink._sep7
+
+  const link = cosmicLink.sep7
+  const payload = sep7Utils.makePayload(link)
+  cosmicLink.extra.signature = keypair.sign(payload).toString("base64")
+  delete cosmicLink._sep7
+}
+
+sep7Utils.verifySignature = async function (cosmicLink, domain) {
+  const link = cosmicLink.sep7.replace(/&amp;signature=.*/, "")
+
+  // Let parser parse signature.
+  await timeout(1)
+  const signature = cosmicLink.extra.signature
+
+  if (!signature) {
+    throw new Error(`No signature attached for domain: ${domain}`)
+  }
+
+  const payload = sep7Utils.makePayload(link)
+  const keypair = await sep7Utils.getDomainKeypair(domain)
+
+  if (keypair.verify(payload, Buffer.from(signature, "base64"))) {
+    return domain
+  } else {
+    throw new Error(`Invalid signature for domain: ${domain}`)
+  }
+}
+
+sep7Utils.getDomainKeypair = async function (domain) {
+  const toml = await StellarSdk.StellarTomlResolver.resolve(domain)
+  const signingKey = toml.URI_REQUEST_SIGNING_KEY
+
+  if (!signingKey) {
+    throw new Error(`Can't find signing key for domain: ${domain}`)
+  }
+
+  return StellarSdk.Keypair.fromPublicKey(signingKey)
+}
+
+sep7Utils.makePayload = function (link) {
+  return Buffer.concat([
+    Buffer.alloc(35),
+    Buffer.alloc(1, 4),
+    Buffer.from(`stellar.sep.7 - URI Scheme${link}`)
+  ])
 }
 </code></pre>
         </article>

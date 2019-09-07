@@ -193,10 +193,8 @@
 
     // SEP-0007: Update origin_domain after signature check.
     if (cosmicLink.extra.originDomain) {
-      cosmicLink.extra.originDomain.then(origin => {
-        cosmicLink.extra.originDomain = origin
-      }).catch(error => {
-        cosmicLink.extra.originDomain = error
+      cosmicLink.verifySep7().catch(error => {
+        cosmicLink.extra.originDomain = error.message
       }).finally(() => {
         extraBox.value = JSON.stringify(cosmicLink.extra, null, 2)
       })
@@ -206,8 +204,12 @@
     formats.forEach(format => {
       const box = formatBoxes[format]
       if (format === 'query') history.replaceState({}, '', cosmicLink[format])
-      box.value = cosmicLink[format] || ""
-      box.placeholder = cosmicLink.status || format
+      try {
+        box.value = cosmicLink[format] || ""
+        box.placeholder = cosmicLink.status || format
+      } catch (error) {
+        box.placeholder = error.message
+      }
     })
   }
 
