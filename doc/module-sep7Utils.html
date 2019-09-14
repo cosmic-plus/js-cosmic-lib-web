@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>src/normalize.js - Documentation</title>
+    <title>sep7Utils - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,158 +29,428 @@
 
 <div id="main">
     
-    <h1 class="page-title">src/normalize.js</h1>
+    <h1 class="page-title">sep7Utils</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>"use_strict"
-/**
- * Methods to set tdesc/odesc defaults values and strip out useless data.
- *
- * @exports normalize
- * @private
- */
-const normalize = exports
+        
+            
+        
+    
+</header>
 
-const StellarSdk = require("@cosmic-plus/base/es5/stellar-sdk")
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Sep-0007 protocol utilities.</p>
+<p>The methods listed in the documentation are browser-only.</p></div>
+        
 
-const config = require("./config")
-const resolve = require("./resolve")
-const specs = require("./specs")
+        
+            
+<div class="section-method">
 
-/**
- * Setup the default values for `tdesc`.
- */
-normalize.tdesc = function (conf, tdesc) {
-  removeEmptyFields(tdesc)
-  if (!tdesc.operations) tdesc.operations = []
 
-  if (tdesc.fee === 100 * tdesc.operations.length) delete tdesc.fee
-  dateFields.forEach(field => {
-    if (tdesc[field]) {
-      tdesc[field] = normalize.date(conf, tdesc[field])
-      if (tdesc[field] === "1970") delete tdesc[field]
-    }
-  })
 
-  if (tdesc.network) tdesc.network = normalize.network(conf, tdesc.network)
 
-  // When network is neither test nor public, we want to provide a fallback
-  // Horizon URL; else we don't need it.
-  if (tdesc.network &amp;&amp; tdesc.network !== "public" &amp;&amp; tdesc.network !== "test") {
-    const url = resolve.horizon(config, tdesc.network) || tdesc.horizon
-    tdesc.horizon = normalize.url(conf, url)
-  } else {
-    delete tdesc.horizon
-  }
 
-  if (tdesc.callback) tdesc.callback = normalize.url(conf, tdesc.callback)
-}
 
-const dateFields = ["minTime", "maxTime"]
 
-normalize.date = function (conf, date) {
-  if (date.match(/^\+[0-9]+$/)) {
-    const shifted = new Date()
-    shifted.setMinutes(shifted.getMinutes() + +date.substr(1))
-    date = shifted.toISOString().replace(/\.[0-9]{3}/, "")
-  }
-  return date
-    .replace(/:00\.000/, "")
-    .replace(/\.000/, "")
-    .replace(/T00:00Z/, "")
-    .replace(/-01$/, "")
-    .replace(/-01$/, "")
-}
+<dl class="details">
 
-normalize.network = function (conf, network) {
-  const networkName = resolve.networkName(conf, network)
-  if (networkName === "public" || networkName === "test") {
-    return networkName
-    // In network is neither test nor public, we want to use the network
-    // passphrase as parameter to ensure cross-wallet compatibility.
-  } else {
-    return resolve.networkPassphrase(conf, network)
-  }
-}
+    
 
-normalize.url = function (conf, url) {
-  if (url) return url.substr(0, 4) === "http" ? url : "https://" + url
-}
+    
 
-/**
- * Add the implicit values for fields made optional in the CosmicLink protocol
- * but required by StellarSdk.
- */
-normalize.odesc = function (conf, odesc) {
-  removeEmptyFields(odesc)
-  /// No limit = maximum limit.
-  if (odesc.limit === "922337203685.4775807") delete odesc.limit
-  /// New offer.
-  if (odesc.offerId === "0") delete odesc.offerId
-  /// Empty asset conversion path.
-  if (odesc.path &amp;&amp; !odesc.path.length) delete odesc.path
-  /// Useless denominator.
-  if (odesc.price &amp;&amp; odesc.price.d === 1) odesc.price = odesc.price.n + ""
+    
 
-  switch (odesc.type) {
-  case "allowTrust":
-    /// Allow trust by default.
-    if (odesc.authorize === undefined) odesc.authorize = true
-    break
-  case "createPassiveOffer":
-  case "manageOffer":
-    /// Protocol 11 update renamed those operations.
-    if (odesc.type === "manageOffer") odesc.type = "manageSellOffer"
-    else odesc.type = "createPassiveSellOffer"
-    // Fall Through
-  case "createPassiveSellOffer":
-  case "manageBuyOffer":
-  case "manageSellOffer":
-    /// Syntactic sugar for offer deletion
-    if (odesc.offerId &amp;&amp; (odesc.amount === "0" || odesc.buyAmount === "0")) {
-      if (!odesc.buying &amp;&amp; !odesc.selling) {
-        odesc.buying = new StellarSdk.Asset("XLM", specs.neutralAccountId)
-      }
-      if (!odesc.price) odesc.price = "1"
-    }
-    /// XLM as default asset.
-    if (odesc.buying &amp;&amp; !odesc.selling) odesc.selling = XLM
-    if (odesc.selling &amp;&amp; !odesc.buying) odesc.buying = XLM
-    break
-  case "manageData":
-    /// Delete data entry.
-    if (!odesc.value) odesc.value = ""
-    break
-  case "pathPayment":
-    /// XLM as default asset.
-    if (odesc.destAsset &amp;&amp; !odesc.sendAsset) odesc.sendAsset = XLM
-    if (odesc.sendAsset &amp;&amp; !odesc.destAsset) odesc.destAsset = XLM
-    break
-  case "payment":
-    /// XLM as default asset.
-    if (!odesc.asset) odesc.asset = XLM
-    break
-  }
-}
+    
 
-const XLM = StellarSdk.Asset.native()
+    
 
-function removeEmptyFields (object) {
-  for (let field in object) {
-    if (object[field] === null || object[field] === undefined)
-      delete object[field]
-  }
-}
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_sep7-utils.js.html">src/sep7-utils.js</a>, <a href="src_sep7-utils.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md">https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".isWebHandlerSupported"><span class="type-signature">(static) </span>isWebHandlerSupported<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns whether or not the browser can register a SEP-0007 web handler.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_sep7-utils.js.html">src/sep7-utils.js</a>, <a href="src_sep7-utils.js.html#line67">line 67</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>if (cosmicLib.sep7Utils.isWebHandlerSupported()) {
+   registerSep7HandlerButton.show()
+}</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".registerWebHandler"><span class="type-signature">(static) </span>registerWebHandler<span class="signature">(handler, description)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Proposes the user to register <strong>handler</strong> as her default SEP-0007 link
+handler. SEP-0007 requests will hit <code>{handler}?sep7={sep7Request}</code>.</p>
+<p>Note that this makes use of a non-standard feature. Compatibility can be
+checked using <code>sep7Utils.isWebHandlerSupported()</code>.</p>
+<p><a href="https://caniuse.com/#feat=registerprotocolhandler">List of compatible browsers</a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_sep7-utils.js.html">src/sep7-utils.js</a>, <a href="src_sep7-utils.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>URL of the SEP-0007 web handler.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>A brief description of the service.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>cosmicLib.sep7Utils.registerWebHandler(
+ "https://cosmic.link/",
+ "Cosmic.link"
+)</code></pre>
+
+</div>
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
