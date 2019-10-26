@@ -234,7 +234,7 @@ old name is still supported for backward compatibility.</li>
 <h4>manageBuyOffer</h4>
 <p>Offer to buy <code>buyAmount</code> <code>buying</code> for <code>price</code> <code>selling</code> / unit.</p>
 <blockquote>
-<p>...?manageOffer&amp;selling={assetCode}:{assetIssuer}&amp;buying={assetCode}:{assetIssuer}&amp;buyAmount={amount}&amp;price={price}</p>
+<p>...?manageBuyOffer&amp;selling={assetCode}:{assetIssuer}&amp;buying={assetCode}:{assetIssuer}&amp;buyAmount={amount}&amp;price={price}</p>
 </blockquote>
 <p>Notes:</p>
 <ul>
@@ -258,10 +258,10 @@ old name is still supported for backward compatibility.</li>
 </blockquote>
 <p>Notes:</p>
 <ul>
-<li>Before protocol 11 update, this operation was named <code>manageOffer</code>. The old
-name is still supported for backward compatibility.</li>
 <li><code>selling</code> or <code>buying</code> field may be omitted when it is lumens.</li>
 <li><code>price</code> can also be a fraction in the form <code>{1:2}</code> or <code>{sellAmount}:{buyAmount}</code>.</li>
+<li>Before protocol 11 update, this operation was named <code>manageOffer</code>. The old
+name is still supported for backward compatibility.</li>
 </ul>
 <p>Optional fields:</p>
 <ul>
@@ -273,12 +273,31 @@ name is still supported for backward compatibility.</li>
 <blockquote>
 <p>...?manageSellOffer&amp;offerId={integer}&amp;amount=0</p>
 </blockquote>
-<h4>pathPayment</h4>
-<p>Send <code>destAmount</code> <code>destAsset</code> to <code>destination</code> for <code>sendMax</code> <code>sendAsset</code> using
-the available offers for the conversion.</p>
+<h4>pathPaymentStrictReceive</h4>
+<p>Send <code>destAmount</code> <code>destAsset</code> to <code>destination</code> for at most <code>sendMax</code> <code>sendAsset</code>
+using the available offers for the conversion.</p>
 <blockquote>
-<p>...?pathPayment&amp;destination={address}&amp;destAmount={amount}&amp;destAsset={assetCode}:{assetIssuer}
-&amp;sendMax={amount}&amp;sendAsset={assetCode}:{assetIssuer}</p>
+<p>...?pathPaymentStrictReceive&amp;destination={address}&amp;destAmount={amount}&amp;destAsset={assetCode}:{assetIssuer}&amp;sendMax={amount}&amp;sendAsset={assetCode}:{assetIssuer}</p>
+</blockquote>
+<p>Notes:</p>
+<ul>
+<li><code>destAsset</code> or <code>sendAsset</code> field may be omitted when it is lumens.</li>
+<li>Before protocol 12 update, this operation was named <code>pathPayment</code>. The old
+name is still supported for backward compatibility.</li>
+</ul>
+<p>Optional fields:</p>
+<ul>
+<li>&amp;path={asset1},{asset2},...,{assetN} Where each asset is
+<code>{assetCode}:{assetIssuer}</code> or <code>XLM</code>. Define a conversion path to follow. If
+neither <code>destAsset</code> or <code>sendAsset</code> are lumens, you'll likely need <code>&amp;path=XLM</code>
+to set lumens as an intermediate conversion step.</li>
+<li>&amp;source={address}</li>
+</ul>
+<h4>pathPaymentStrictSend</h4>
+<p>Send at least <code>destMin</code> <code>destAsset</code> to <code>destination</code> for <code>sendAmount</code>
+<code>sendAsset</code> using the available offers for the conversion.</p>
+<blockquote>
+<p>...?pathPaymentStrictSend&amp;destination={address}&amp;destMin={amount}&amp;destAsset={assetCode}:{assetIssuer}&amp;sendAmount={amount}&amp;sendAsset={assetCode}:{assetIssuer}</p>
 </blockquote>
 <p>Notes:</p>
 <ul>

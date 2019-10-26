@@ -39,7 +39,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>"use_strict"
+            <pre class="prettyprint source linenums"><code>"use strict"
 /**
  * Contains Stellar transactions specification.
  *
@@ -102,12 +102,19 @@ specs.operationMandatoryFields = {
   manageOffer: ["selling", "buying", "amount", "price"],
   manageBuyOffer: ["selling", "buying", "buyAmount", "price"],
   manageSellOffer: ["selling", "buying", "amount", "price"],
-  pathPayment: [
+  pathPaymentStrictReceive: [
     "sendAsset",
     "sendMax",
     "destination",
     "destAsset",
     "destAmount"
+  ],
+  pathPaymentStrictSend: [
+    "sendAsset",
+    "sendAmount",
+    "destination",
+    "destAsset",
+    "destMin"
   ],
   payment: ["asset", "destination", "amount"],
   setOptions: []
@@ -129,7 +136,8 @@ specs.operationOptionalFields = {
   manageOffer: ["offerId", "source"],
   manageBuyOffer: ["offerId", "source"],
   manageSellOffer: ["offerId", "source"],
-  pathPayment: ["path", "source"],
+  pathPaymentStrictReceive: ["path", "source"],
+  pathPaymentStrictSend: ["path", "source"],
   payment: ["source"],
   setOptions: [
     "inflationDest",
@@ -180,6 +188,7 @@ specs.fieldType = {
   clearFlags: "flags",
   destAsset: "asset",
   destAmount: "amount",
+  destMin: "amount",
   destination: "address",
   fee: "amount",
   highThreshold: "threshold",
@@ -205,6 +214,7 @@ specs.fieldType = {
   name: "string",
   path: "assetsArray",
   selling: "asset",
+  sendAmount: "amount",
   sendAsset: "asset",
   sendMax: "amount",
   sequence: "sequence",

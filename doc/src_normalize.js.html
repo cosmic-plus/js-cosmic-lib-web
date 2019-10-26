@@ -39,7 +39,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>"use_strict"
+            <pre class="prettyprint source linenums"><code>"use strict"
 /**
  * Methods to set tdesc/odesc defaults values and strip out useless data.
  *
@@ -159,6 +159,11 @@ normalize.odesc = function (conf, odesc) {
     if (!odesc.value) odesc.value = ""
     break
   case "pathPayment":
+    /// Protocol 12 update renamed this operation.
+    odesc.type = "pathPaymentStrictReceive"
+    // Fall Through
+  case "pathPaymentStrictReceive":
+  case "pathPaymentStrictSend":
     /// XLM as default asset.
     if (odesc.destAsset &amp;&amp; !odesc.sendAsset) odesc.sendAsset = XLM
     if (odesc.sendAsset &amp;&amp; !odesc.destAsset) odesc.destAsset = XLM

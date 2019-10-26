@@ -224,10 +224,16 @@ function operationMeaning (odesc) {
       }
       return msg
     }
-  case "pathPayment":
+  case "pathPaymentStrictReceive":
     msg =
         "Send {destAmount} {destAsset} to {destination} for a maximum "
         + "of {sendMax} {sendAsset}"
+    if (odesc.path) msg += " using conversion path: {path}"
+    return msg
+  case "pathPaymentStrictSend":
+    msg =
+        "Send at least {destMin} {destAsset} to {destination} for "
+        + "{sendAmount} {sendAsset}"
     if (odesc.path) msg += " using conversion path: {path}"
     return msg
   case "payment":
